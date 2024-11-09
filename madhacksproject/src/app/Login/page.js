@@ -48,7 +48,7 @@ function LoginPage() {
       {/* Login Form with Blurred Glass Effect */}
       <div className="relative bg-eggshell bg-opacity-90 backdrop-blur-md p-8 rounded-lg shadow-lg max-w-md w-full text-gray-900">
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800 drop-shadow-md">
-          Login
+          Log In
         </h2>
 
         <form onSubmit={handleLogin} className="space-y-4">
@@ -86,16 +86,16 @@ function LoginPage() {
           </div>
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-blue-400 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-200"
+            className="w-full py-2 px-4 bg-theorange text-white font-semibold rounded-md hover:bg-darkerorange transition duration-200"
           >
-            Login
+            Log In
           </button>
         </form>
 
         <div className="text-center mt-4">
           <p className="text-gray-700">
             Don't have an account?{" "}
-            <Link href="/signup" className="text-blue-500 hover:underline">
+            <Link href="/signup" className="text-theorange hover:underline">
               Sign up!
             </Link>
           </p>

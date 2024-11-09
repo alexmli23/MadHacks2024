@@ -13,7 +13,12 @@ module.exports = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        deepteal: "#51829B",
         eggshell: "#f9f9f9",
+        theorange: "#F6995C",
+        darkerorange: "#FF9D3D",
+        paleyellow: "#EADFB4",
+        smokyblue: "9BB0C1"
       },
     },
   },
