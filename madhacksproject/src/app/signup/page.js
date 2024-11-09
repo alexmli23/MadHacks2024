@@ -69,11 +69,11 @@ function SignupPage() {
               <label htmlFor="interests">Pick your interests! (Minimum of 5)</label>
               <input type="checkbox"
           </div> */}
-          <button type="submit" className="w-full py-2 px-4 bg-blue-400 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-200">Next</button>
+          <button type="submit" className="w-full py-2 px-4 bg-theorange text-white font-semibold rounded-md hover:bg-darkerorange transition duration-200">Next</button>
         </form>
 
         <div className="text-center mt-4">
-          <p className="text-gray-700">Already have an account?{" "}<Link href="/login" className="text-blue-500 hover:underline">
+          <p className="text-gray-700">Already have an account?{" "}<Link href="/login" className="text-theorange hover:underline">
               Log In
             </Link>
           </p>
