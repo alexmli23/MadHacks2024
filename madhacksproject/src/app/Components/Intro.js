@@ -16,14 +16,38 @@ const Intro = () => {
     "Are workers unions progressive or mutiny?",
     "Should Disney keep making live action movies of their classics?"
   ];
-  const [index, setIndex] = useState(0);
+  
+  const categories = [
+    "POLITICS",
+    "FOOD",
+    "SPORTS",
+    "ENTERTAINMENT",
+    "ART",
+    "GAMING",
+    "EDUCATION",
+    "TECHNOLOGY",
+    "BEAUTY",
+    "LITERATURE",
+    "LABOR",
+    "MOVIES"
+  ];
+
+  const [textIndex, setTextIndex] = useState(0);
+  const [categoryIndex, setCategoryIndex] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prevIndex) => (prevIndex + 1) % texts.length);
+    const textInterval = setInterval(() => {
+      setTextIndex((prevIndex) => (prevIndex + 1) % texts.length);
     }, 4000);
 
-    return () => clearInterval(interval);
+    const categoryInterval = setInterval(() => {
+      setCategoryIndex((prevIndex) => (prevIndex + 1) % categories.length);
+    }, 4000);
+
+    return () => {
+      clearInterval(textInterval);
+      clearInterval(categoryInterval);
+    };
   }, []);
 
   return (
@@ -43,11 +67,16 @@ const Intro = () => {
           </button>
         </Link>
       </div>
-      <div className="relative flex flex-col justify-center items-center w-full h-full">
-        <h1 className="text-8xl text-sky-400 font-serif text-center">{texts[index]}</h1>
+      <div className="relative flex flex-col justify-center items-center w-full h-full px-8 text-center">
+        <h2 className="text-4xl text-sky-400 font-sans font-extrabold mb-2">
+          {categories[categoryIndex]}
+        </h2>
+        <h1 className="text-8xl text-sky-400 font-serif mb-8 px-8">
+          {texts[textIndex]}
+        </h1>
         <Link href="/Discussion">
-          <button className="text-sky-400 text-3xl bg-transparent border-none cursor-pointer py-6">
-            Find out and Discuss! 
+          <button className="text-sky-400 text-3xl bg-transparent border-none cursor-pointer py-44 fixed bottom-10 inset-x-0 mx-auto text-center">
+            Find out and Discuss!
           </button>
         </Link>
       </div>
