@@ -16,12 +16,9 @@ const mongoURI = process.env.MONGO_URI;
 console.log(mongoURI);
 
 // MongoDB connection
-mongoose.connect(mongoURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-    .then(() => console.log('Connected to MongoDB Atlas'))
-    .catch((err) => console.log('MongoDB connection error:', err));
+mongoose.connect(mongoURI)
+  .then(() => console.log('Connected to MongoDB Atlas'))
+  .catch((err) => console.log('MongoDB connection error:', err));
 
 // Define User model
 const userSchema = new mongoose.Schema({
