@@ -21,7 +21,7 @@ const WheelOfFortune = () => {
     const width = 400;
     const height = 400;
     const radius = Math.min(width, height) / 2;
-    const blueColor = '#FFA500'; // Equivalent to bg-blue-400
+    const blueColor = '#FFA500'; // Equivalent to bg-blue-400 ACTUALLY ORANGE
 
     const svg = d3.select('#chart')
       .append('svg')

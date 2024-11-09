@@ -63,9 +63,9 @@ const Intro = () => {
       ></video>
 
       {/* Header with Login Button */}
-      <header className="absolute top-0 w-full bg-white bg-opacity-60 h-16 flex items-center justify-end px-8 z-10">
+      <header className="absolute top-0 w-full bg-eggshell bg-opacity-60 h-16 flex items-center justify-end px-8 z-10">
         <Link href="/login">
-          <button className=" text-sky-400 text-2xl font-semibold">
+          <button className=" text-darkerorange text-2xl font-semibold">
             Login
           </button>
         </Link>
@@ -73,14 +73,14 @@ const Intro = () => {
 
       {/* Main Content */}
       <div className="relative flex flex-col justify-center items-center w-full h-full px-8 text-center">
-        <h2 className="text-4xl text-orange-400 font-sans font-extrabold mb-2">
+        <h2 className="text-4xl text-darkerorange font-sans font-extrabold mb-2">
           {categories[categoryIndex]}
         </h2>
-        <h1 className="text-8xl text-sky-400 font-serif mb-8 px-8">
+        <h1 className="text-8xl text-deepteal font-serif mb-8 px-8">
           {texts[textIndex]}
         </h1>
         <Link href="/Discussion">
-          <button className="text-sky-400 text-3xl bg-transparent border-none cursor-pointer py-4">
+          <button className="text-darkerorange text-3xl bg-transparent border-none cursor-pointer py-4">
             Find out and Discuss!
           </button>
         </Link>

@@ -11,6 +11,7 @@ const app = express();
 // Middleware
 app.use(express.json()); // to parse JSON bodies
 app.use(cors()); // to allow cross-origin requests
+
 const mongoURI = process.env.MONGO_URI;
 console.log(mongoURI);
 
@@ -23,33 +24,57 @@ mongoose.connect(mongoURI, {
     .catch((err) => console.log('MongoDB connection error:', err));
 
 // Define User model
-const User = mongoose.model('User', new mongoose.Schema({
-  username: String,
-  password: String,
-}));
+const userSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    interests: { type: [String], required: false, default: [] }
+});
+
+const User = mongoose.model('User', userSchema);
 
 // Login route
-app.post('/api/auth/login', async (req, res) => {
-  const { username, password } = req.body;
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+  
+    try {
+      const user = await User.findOne({ name: username }); // or use email if you prefer email for login
+  
+      if (!user) {
+        console.log("username not found");
+        return res.status(400).json({ message: "User not found!" });
+      }
+  
+      // Compare passwords
+      if (password !== user.password) {
+        console.log("password not right");
+        return res.status(400).json({ message: "Invalid credentials!" });
+      }
+  
+      console.log("login successful");
+      res.status(200).json({ message: "Login successful!", user });
+    } catch (error) {
+      res.status(500).json({ message: "Server error", error });
+    }
+});
 
-  try {
-    // Find user in the database
-    const user = await User.findOne({ username });
-    if (!user) return res.status(400).send({ message: 'Invalid credentials' });
-
-    // Compare password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).send({ message: 'Invalid credentials' });
-
-    // Generate JWT token
-    const token = jwt.sign({ id: user._id }, 'yourSecretKey', { expiresIn: '1h' });
-
-    // Send token as response
-    res.json({ token });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: 'Server error' });
-  }
+app.post('/signup', async (req, res) => {
+    const { name, email, password } = req.body;
+  
+    try {
+      const newUser = new User({
+        name,
+        email,
+        password, // You should hash the password in a real-world scenario
+        interests: []
+      });
+      await newUser.save();
+      console.log("user created successfully: " + newUser);
+      res.status(201).json({ message: "User created successfully", user: newUser });
+    } catch (error) {
+        console.log("error creating user");
+      res.status(400).json({ error: error.message });
+    }
 });
 
 // Start server
