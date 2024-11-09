@@ -1,8 +1,13 @@
 import React from 'react'
+import Wheel from "../Components/SpinWheel"
 
 const page = () => {
   return (
-    <div>Disc</div>
+    <>
+    <div className='flex justify-center items-center'>
+      <Wheel />
+    </div>
+    </>
   )
 }
 
