@@ -16,10 +16,7 @@ const mongoURI = process.env.MONGO_URI;
 console.log(mongoURI);
 
 // MongoDB connection
-mongoose.connect(mongoURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+mongoose.connect(mongoURI)
     .then(() => console.log('Connected to MongoDB Atlas'))
     .catch((err) => console.log('MongoDB connection error:', err));
 
