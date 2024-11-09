@@ -25,7 +25,7 @@ function LoginPage() {
       ></video>
 
       {/* Login Form with Blurred Glass Effect */}
-      <div className="relative bg-white bg-opacity-80 backdrop-blur-md p-8 rounded-lg shadow-lg max-w-md w-full text-gray-900">
+      <div className="relative bg-eggshell bg-opacity-90 backdrop-blur-md p-8 rounded-lg shadow-lg max-w-md w-full text-gray-900">
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800 drop-shadow-md">
           Login
         </h2>

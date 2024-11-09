@@ -13,6 +13,7 @@ module.exports = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        eggshell: "#f9f9f9",
       },
     },
   },
