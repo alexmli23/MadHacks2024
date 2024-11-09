@@ -7,9 +7,30 @@ function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Logging in with:", username, password);
+
+    try {
+      const response = await fetch('http://localhost:5000/login', {  // Assuming you're using a Next.js API route for the backend
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Login successful:", data);
+        // Redirect or set user session
+      } else {
+        setError(data.message); // Display the error message
+      }
+    } catch (error) {
+      setError("An error occurred. Please try again later.");
+      console.error("Error during login:", error);
+    }
   };
 
   return (

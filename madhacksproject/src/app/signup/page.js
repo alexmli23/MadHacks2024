@@ -7,12 +7,35 @@ function SignupPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [checked, setChecked] = useState(false);
-
-  const handleSubmit = (event) => {
+  const [interests, setInterests] = useState([]);
+  
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Here you would typically make an API call to send the signup data to your backend
-    console.log('Signup data:', { name, email, password, checked });
+    
+    const payload = { name, email, password, interests };
+    console.log('Signup data:', { name, email, interests });
+
+    try {
+        // Send the signup data to your backend
+        const response = await fetch('http://localhost:5000/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+  
+        const data = await response.json();
+        
+        if (response.ok) {
+          console.log('Signup successful:', data);
+          // You could redirect the user after signup or show a success message
+        } else {
+          console.log('Signup error:', data);
+        }
+      } catch (error) {
+        console.error('Error during signup:', error);
+      }
   };
 
   return (
