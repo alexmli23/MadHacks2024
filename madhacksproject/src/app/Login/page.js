@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from 'next/link';
 
 function LoginPage() {
   const [username, setUsername] = useState("");
@@ -35,6 +36,14 @@ function LoginPage() {
         </div>
         <button type="submit">Login</button>
       </form>
+      <div>
+        <p className="text-black">
+              Don't have an account? 
+              <Link href="/signup" className="text-blue-500">
+                Sign up!
+              </Link>
+        </p>
+      </div>
     </div>
   );
 }
