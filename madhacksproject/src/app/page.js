@@ -1,11 +1,11 @@
-"use client"
-import Image from "next/image";
-import Intro from "../app/Components/Intro"
+"use client";
+import Intro from "./Components/Intro";
 
 export default function Home() {
   return (
-    <Intro />
+    <>
+      <Intro />
+    </>
   );
 }
-
  
