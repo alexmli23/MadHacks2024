@@ -8,7 +8,7 @@ function SignupPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [interests, setInterests] = useState([]);
-  
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     
@@ -17,7 +17,7 @@ function SignupPage() {
 
     try {
         // Send the signup data to your backend
-        const response = await fetch('http://localhost:5000/signup', {
+        const response = await fetch('http://localhost:5001/signup', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

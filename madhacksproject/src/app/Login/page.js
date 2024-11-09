@@ -11,7 +11,7 @@ function LoginPage() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:5000/login', {  // Assuming you're using a Next.js API route for the backend
+      const response = await fetch('http://localhost:5001/login', {  // Assuming you're using a Next.js API route for the backend
         method: "POST",
         headers: {
           "Content-Type": "application/json",
