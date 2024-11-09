@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
 
 const Intro = () => {
   const texts = [
-    "Was the 2024 Presidential election rigged?", 
-    "Is spray cheese real?", 
-    "Who will make it to the SuperBowl?", 
+    "Was the 2024 Presidential election rigged?",
+    "Is spray cheese real?",
+    "Who will make it to the SuperBowl?",
     "Who does not deserve a Grammy nomination?",
     "Is fanart a real art form?",
     "Valorant: Should Chamber be nerfed?",
@@ -14,9 +14,9 @@ const Intro = () => {
     "Sephora, Ulta Beauty, or drug store products?",
     "Is Harry Potter really a Gryffindor?",
     "Are workers unions progressive or mutiny?",
-    "Should Disney keep making live action movies of their classics?"
+    "Should Disney keep making live action movies of their classics?",
   ];
-  
+
   const categories = [
     "POLITICS",
     "FOOD",
@@ -29,7 +29,7 @@ const Intro = () => {
     "BEAUTY",
     "LITERATURE",
     "LABOR",
-    "MOVIES"
+    "MOVIES",
   ];
 
   const [textIndex, setTextIndex] = useState(0);
@@ -52,6 +52,7 @@ const Intro = () => {
 
   return (
     <div className="relative w-full h-screen">
+      {/* Background Video */}
       <video
         src="/Assets/background.mp4"
         autoPlay
@@ -60,13 +61,15 @@ const Intro = () => {
         playsInline
         className="absolute top-0 left-0 w-full h-full object-cover"
       ></video>
-      <div className="absolute top-5 right-5 z-10">
+
+      {/* Header with Login Button */}
+      <header className="absolute top-0 w-full bg-white bg-opacity-60 h-16 flex items-center justify-end px-8 z-10">
         <Link href="/login">
-          <button className="text-sky-100 text-5xl bg-black bg-opacity-50 p-3 rounded">
-            Login
-          </button>
+          <button className="text-sky-400 text-2xl font-semibold">Login</button>
         </Link>
-      </div>
+      </header>
+
+      {/* Main Content */}
       <div className="relative flex flex-col justify-center items-center w-full h-full px-8 text-center">
         <h2 className="text-4xl text-sky-400 font-sans font-extrabold mb-2">
           {categories[categoryIndex]}
@@ -75,7 +78,7 @@ const Intro = () => {
           {texts[textIndex]}
         </h1>
         <Link href="/Discussion">
-          <button className="text-sky-400 text-3xl bg-transparent border-none cursor-pointer py-44 fixed bottom-10 inset-x-0 mx-auto text-center">
+          <button className="text-sky-400 text-3xl bg-transparent border-none cursor-pointer py-4">
             Find out and Discuss!
           </button>
         </Link>
