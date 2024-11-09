@@ -3,18 +3,18 @@ import Link from "next/link";
 
 const Intro = () => {
   const texts = [
-    "Was the 2024 Presidential election rigged?",
-    "Is spray cheese real?",
-    "Who will make it to the SuperBowl?",
-    "Who does not deserve a Grammy nomination?",
-    "Is fanart a real art form?",
-    "Valorant: Should Chamber be nerfed?",
-    "Should university tuition cost less?",
-    "Is the Metaverse progress or dystopian?",
-    "Sephora, Ulta Beauty, or drug store products?",
-    "Is Harry Potter really a Gryffindor?",
-    "Are workers unions progressive or mutiny?",
-    "Should Disney keep making live action movies of their classics?",
+    "Was the 2024 Presidential Election Rigged?",
+    "Is Spray Cheese Real?",
+    "Who Will Make It to the Super Bowl?",
+    "Who Does Not Deserve a Grammy Nomination?",
+    "Is Fan Art a Real Art Form?",
+    "Valorant: Should Chamber Be Nerfed?",
+    "Should University Tuition Cost Less?",
+    "Is the Metaverse Progress or Dystopian?",
+    "Sephora, Ulta Beauty, or Drugstore Products?",
+    "Is Harry Potter Really a Gryffindor?",
+    "Are Workers' Unions Progressive or Mutiny?",
+    "Should Disney Keep Making Live-Action Movies of Their Classics?",
   ];
 
   const categories = [
@@ -65,7 +65,9 @@ const Intro = () => {
       {/* Header with Login Button */}
       <header className="absolute top-0 w-full bg-white bg-opacity-60 h-16 flex items-center justify-end px-8 z-10">
         <Link href="/login">
-          <button className="text-sky-400 text-2xl font-semibold">Login</button>
+          <button className=" text-sky-400 text-2xl font-semibold">
+            Login
+          </button>
         </Link>
       </header>
 
