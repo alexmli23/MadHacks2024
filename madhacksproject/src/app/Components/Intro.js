@@ -73,7 +73,7 @@ const Intro = () => {
 
       {/* Main Content */}
       <div className="relative flex flex-col justify-center items-center w-full h-full px-8 text-center">
-        <h2 className="text-4xl text-sky-400 font-sans font-extrabold mb-2">
+        <h2 className="text-4xl text-orange-400 font-sans font-extrabold mb-2">
           {categories[categoryIndex]}
         </h2>
         <h1 className="text-8xl text-sky-400 font-serif mb-8 px-8">
