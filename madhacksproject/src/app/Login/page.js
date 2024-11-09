@@ -7,9 +7,30 @@ function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Logging in with:", username, password);
+
+    try {
+      const response = await fetch('http://localhost:5000/login', {  // Assuming you're using a Next.js API route for the backend
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Login successful:", data);
+        // Redirect or set user session
+      } else {
+        setError(data.message); // Display the error message
+      }
+    } catch (error) {
+      setError("An error occurred. Please try again later.");
+      console.error("Error during login:", error);
+    }
   };
 
   return (
@@ -27,7 +48,7 @@ function LoginPage() {
       {/* Login Form with Blurred Glass Effect */}
       <div className="relative bg-eggshell bg-opacity-90 backdrop-blur-md p-8 rounded-lg shadow-lg max-w-md w-full text-gray-900">
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800 drop-shadow-md">
-          Login
+          Log In
         </h2>
 
         <form onSubmit={handleLogin} className="space-y-4">
@@ -65,16 +86,16 @@ function LoginPage() {
           </div>
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-blue-400 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-200"
+            className="w-full py-2 px-4 bg-theorange text-white font-semibold rounded-md hover:bg-darkerorange transition duration-200"
           >
-            Login
+            Log In
           </button>
         </form>
 
         <div className="text-center mt-4">
           <p className="text-gray-700">
             Don't have an account?{" "}
-            <Link href="/signup" className="text-blue-500 hover:underline">
+            <Link href="/signup" className="text-theorange hover:underline">
               Sign up!
             </Link>
           </p>
