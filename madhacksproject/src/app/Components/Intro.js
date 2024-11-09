@@ -65,7 +65,7 @@ const Intro = () => {
       {/* Header with Login Button */}
       <header className="absolute top-0 w-full bg-eggshell bg-opacity-60 h-16 flex items-center justify-end px-8 z-10">
         <Link href="/login">
-          <button className=" text-darkerorange text-2xl font-semibold">
+          <button className=" text-darkerorange text-2xl font-semibold text-theorange hover:underline">
             Login
           </button>
         </Link>
@@ -80,7 +80,7 @@ const Intro = () => {
           {texts[textIndex]}
         </h1>
         <Link href="/Discussion">
-          <button className="text-darkerorange text-3xl bg-transparent border-none cursor-pointer py-4">
+          <button className="text-darkerorange text-3xl bg-transparent border-none cursor-pointer py-4 text-theorange hover:underline">
             Find out and Discuss!
           </button>
         </Link>
