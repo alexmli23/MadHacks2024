@@ -19,7 +19,7 @@ const Intro = () => {
                 Enter
             </button>
         </Link>
-        <Link href="/Login">
+        <Link href="/login/LoginPage">
             <button className="text-sky-400 text-5xl bg-transparent border-none cursor-pointer">
                 Login
             </button>
