@@ -10,7 +10,7 @@ const app = express();
 
 // Middleware
 app.use(express.json()); // to parse JSON bodies
-app.use(cors()); // to allow cross-origin requests
+app.use(cors({ origin: 'http://localhost:3000' })); // to allow cross-origin requests
 
 const mongoURI = process.env.MONGO_URI;
 console.log(mongoURI);
