@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        apercuMed: ['"Apercu Pro Medium"', "sans-serif"]
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
