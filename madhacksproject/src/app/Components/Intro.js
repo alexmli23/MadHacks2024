@@ -61,7 +61,7 @@ const Intro = () => {
         className="absolute top-0 left-0 w-full h-full object-cover"
       ></video>
       <div className="absolute top-5 right-5 z-10">
-        <Link href="/Login">
+        <Link href="/login">
           <button className="text-sky-100 text-5xl bg-black bg-opacity-50 p-3 rounded">
             Login
           </button>
