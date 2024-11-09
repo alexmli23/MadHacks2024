@@ -13,9 +13,10 @@ module.exports = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        deepteal: "#51829B",
+        teal: "#51829B",
+        darkerteal: "#3E6880",
         eggshell: "#f9f9f9",
-        theorange: "#F6995C",
+        orange: "#F6995C",
         darkerorange: "#FF9D3D",
         paleyellow: "#EADFB4",
         smokyblue: "9BB0C1"

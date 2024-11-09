@@ -2,17 +2,21 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+// import { useRouter } from 'next/router';
 
 function SignupPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [checked, setChecked] = useState(false);
+  // const router = useRouter();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Here you would typically make an API call to send the signup data to your backend
+
     console.log('Signup data:', { name, email, password, checked });
+
+    //router.push('/interests');
   };
 
   return (
@@ -26,6 +30,15 @@ function SignupPage() {
         playsInline
         className="absolute top-0 left-0 w-full h-full object-cover -z-10"
       ></video>
+
+      {/* TEMP */}
+      <header className="absolute top-0 w-full bg-eggshell bg-opacity-60 h-16 flex items-center justify-end px-8 z-10">
+        <Link href="/interests">
+          <button className=" text-darkerorange text-2xl font-semibold">
+            temp to interests
+          </button>
+        </Link>
+      </header>
 
       {/* Sign Up Form with Blurred Glass Effect */}
       <div className="relative bg-eggshell bg-opacity-90 backdrop-blur-md p-8 rounded-lg shadow-lg max-w-md w-full text-gray-900">
@@ -69,11 +82,11 @@ function SignupPage() {
               <label htmlFor="interests">Pick your interests! (Minimum of 5)</label>
               <input type="checkbox"
           </div> */}
-          <button type="submit" className="w-full py-2 px-4 bg-theorange text-white font-semibold rounded-md hover:bg-darkerorange transition duration-200">Next</button>
+          <button type="submit" className="w-full py-2 px-4 bg-orange text-white font-semibold rounded-md hover:bg-darkerorange transition duration-200">Next</button>
         </form>
 
         <div className="text-center mt-4">
-          <p className="text-gray-700">Already have an account?{" "}<Link href="/login" className="text-theorange hover:underline">
+          <p className="text-gray-700">Already have an account?{" "}<Link href="/login" className="text-orange hover:underline">
               Log In
             </Link>
           </p>

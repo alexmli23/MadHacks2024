@@ -15,6 +15,7 @@ const Intro = () => {
     "Is Harry Potter Really a Gryffindor?",
     "Are Workers' Unions Progressive or Mutiny?",
     "Should Disney Keep Making Live-Action Movies of Their Classics?",
+    "What’s a Trend that Should Stop?"
   ];
 
   const categories = [
@@ -30,6 +31,7 @@ const Intro = () => {
     "LITERATURE",
     "LABOR",
     "MOVIES",
+    "FASHION",
   ];
 
   const [textIndex, setTextIndex] = useState(0);
@@ -76,7 +78,7 @@ const Intro = () => {
         <h2 className="text-4xl text-darkerorange font-sans font-extrabold mb-2">
           {categories[categoryIndex]}
         </h2>
-        <h1 className="text-8xl text-deepteal font-serif mb-8 px-8">
+        <h1 className="text-8xl text-teal font-serif mb-8 px-8">
           {texts[textIndex]}
         </h1>
         <Link href="/Discussion">

@@ -65,7 +65,7 @@ function LoginPage() {
           </div>
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-theorange text-white font-semibold rounded-md hover:bg-darkerorange transition duration-200"
+            className="w-full py-2 px-4 bg-orange text-white font-semibold rounded-md hover:bg-darkerorange transition duration-200"
           >
             Log In
           </button>
@@ -74,7 +74,7 @@ function LoginPage() {
         <div className="text-center mt-4">
           <p className="text-gray-700">
             Don't have an account?{" "}
-            <Link href="/signup" className="text-theorange hover:underline">
+            <Link href="/signup" className="text-orange hover:underline">
               Sign up!
             </Link>
           </p>
