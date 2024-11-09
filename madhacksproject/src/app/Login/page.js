@@ -1,16 +1,15 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import Link from 'next/link';
 
 function LoginPage() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
-
-    // Perform login logic here, e.g., send credentials to a backend server
-    console.log('Logging in with:', username, password);
+    console.log("Logging in with:", username, password);
   };
 
   return (
@@ -37,6 +36,14 @@ function LoginPage() {
         </div>
         <button type="submit">Login</button>
       </form>
+      <div>
+        <p className="text-black">
+              Don't have an account? 
+              <Link href="/signup" className="text-blue-500">
+                Sign up!
+              </Link>
+        </p>
+      </div>
     </div>
   );
 }

@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 
 function SignupPage() {
@@ -43,10 +45,10 @@ function SignupPage() {
             onChange={(e) => setPassword(e.target.value)} 
           />
         </div>
-        <div>
+        {/* <div>
             <label htmlFor="interests">Pick your interests! (Minimum of 5)</label>
             <input type="checkbox"
-        </div>
+        </div> */}
         <button type="submit">Signup</button>
       </form>
     </div>
