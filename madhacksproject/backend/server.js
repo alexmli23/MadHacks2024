@@ -23,7 +23,11 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true }, // Plain text for demo
-  interests: { type: [String], required: false, default: [] }
+  interests: { type: [{
+    label: String,
+    question: String,
+    answer: String
+  }], required: false, default: [] }
 });
 
 const User = mongoose.model('User', userSchema);
@@ -142,6 +146,39 @@ app.get('/get-interests/:userId', async (req, res) => {
   }
 });
 
+router.post('/update-interests-questions/:userId', async (req, res) => {
+    const userId = req.params.userId;
+    const interests = [
+      { label: 'politics', question: 'Was the 2024 Presidential Election Rigged?' },
+      { label: 'food', question: 'Is Spray Cheese Real?' },
+      { label: 'sports', question: 'Who Will Make It to the Super Bowl?' },
+      { label: 'popCulture', question: 'Who Does Not Deserve a Grammy Nomination?' },
+      { label: 'art', question: 'Is Fan Art a Real Art Form?' },
+      { label: 'gaming', question: 'Valorant: Should Chamber Be Nerfed?' },
+      { label: 'scienceEducation', question: 'Should University Tuition Cost Less?' },
+      { label: 'tech', question: 'Is the Metaverse Innovation or Dystopian?' },
+      { label: 'financeEconomics', question: 'What is your take on the current economic trends?' },
+      { label: 'beauty', question: 'Sephora, Ulta Beauty, or Drugstore Products?' },
+      { label: 'books', question: 'Is Harry Potter Really a Gryffindor?' },
+      { label: 'business', question: 'Are Workers\' Unions Beneficial or Mutiny?' },
+      { label: 'tvMovies', question: 'Should Disney Keep Making Live-Action Movies of Their Classics?' },
+      { label: 'fashion', question: 'What\'s a Trend that Should Stop?' }
+    ];
+  
+    try {
+      // Update or insert the user's interests
+      const updatedUser = await User.findOneAndUpdate(
+        { userId: userId },
+        { $set: { interests: interests } },
+        { new: true, upsert: true }
+      );
+  
+      res.status(200).json({ message: 'Interests updated successfully', user: updatedUser });
+    } catch (error) {
+      console.error('Error updating interests:', error);
+      res.status(500).json({ message: 'Failed to update interests', error });
+    }
+  });
 
 // Start server
 app.listen(5001, () => {
