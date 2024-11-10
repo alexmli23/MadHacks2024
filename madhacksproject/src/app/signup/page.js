@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from "next/link";
 import { useRouter } from 'next/navigation'; // Updated import for `useRouter` from Next.js app directory
 
 function SignupPage() {
