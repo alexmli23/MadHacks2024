@@ -37,6 +37,7 @@ const Intro = () => {
     },
   ];
 
+  // Initialize votes with upvotes and downvotes for each comment
   const initialVotes = options.map(() => ({
     upvotes: 0,
     downvotes: 0,
@@ -44,6 +45,7 @@ const Intro = () => {
   }));
   const [votes, setVotes] = useState(initialVotes);
 
+  // Upvote function
   const handleUpvote = (index) => {
     setVotes((prevVotes) =>
       prevVotes.map((vote, i) =>
@@ -54,6 +56,7 @@ const Intro = () => {
     );
   };
 
+  // Downvote function
   const handleDownvote = (index) => {
     setVotes((prevVotes) =>
       prevVotes.map((vote, i) =>
@@ -64,18 +67,30 @@ const Intro = () => {
     );
   };
 
-  const filteredOptions = options.filter((option) => {
-    const maxPercent = Math.max(
-      option.redPercent,
-      option.bluePercent,
-      option.neutralPercent
-    );
-    if (filter === "Highest Red") return option.redPercent === maxPercent;
-    if (filter === "Highest Blue") return option.bluePercent === maxPercent;
-    if (filter === "Highest Neutral")
-      return option.neutralPercent === maxPercent;
-    return true; // "All" option, show all comments
-  });
+  // Combine options and votes, then sort based on the selected filter
+  const combinedData = options.map((option, index) => ({
+    ...option,
+    ...votes[index],
+  }));
+
+  const sortedOptions = combinedData
+    .sort((a, b) => {
+      if (filter === "Most Likes") return b.upvotes - a.upvotes;
+      if (filter === "Most Dislikes") return b.downvotes - a.downvotes;
+      return 0;
+    })
+    .filter((option) => {
+      const maxPercent = Math.max(
+        option.redPercent,
+        option.bluePercent,
+        option.neutralPercent
+      );
+      if (filter === "Highest Red") return option.redPercent === maxPercent;
+      if (filter === "Highest Blue") return option.bluePercent === maxPercent;
+      if (filter === "Highest Neutral")
+        return option.neutralPercent === maxPercent;
+      return true; // "All" option, show all comments
+    });
 
   return (
     <div className="relative w-full min-h-screen overflow-hidden">
@@ -137,48 +152,31 @@ const Intro = () => {
                 </button>
                 {filterDropdownOpen && (
                   <div className="absolute w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-1 z-10">
-                    <button
-                      onClick={() => {
-                        setFilter("All");
-                        setFilterDropdownOpen(false);
-                      }}
-                      className="block w-full text-left px-4 py-2 hover:bg-gray-200 text-teal font-semibold"
-                    >
-                      All
-                    </button>
-                    <button
-                      onClick={() => {
-                        setFilter("Highest Red");
-                        setFilterDropdownOpen(false);
-                      }}
-                      className="block w-full text-left px-4 py-2 hover:bg-gray-200 text-teal font-semibold"
-                    >
-                      Highest Red
-                    </button>
-                    <button
-                      onClick={() => {
-                        setFilter("Highest Blue");
-                        setFilterDropdownOpen(false);
-                      }}
-                      className="block w-full text-left px-4 py-2 hover:bg-gray-200 text-teal font-semibold"
-                    >
-                      Highest Blue
-                    </button>
-                    <button
-                      onClick={() => {
-                        setFilter("Highest Neutral");
-                        setFilterDropdownOpen(false);
-                      }}
-                      className="block w-full text-left px-4 py-2 hover:bg-gray-200 text-teal font-semibold"
-                    >
-                      Highest Neutral
-                    </button>
+                    {[
+                      "All",
+                      "Highest Red",
+                      "Highest Blue",
+                      "Highest Neutral",
+                      "Most Likes",
+                      "Most Dislikes",
+                    ].map((option) => (
+                      <button
+                        key={option}
+                        onClick={() => {
+                          setFilter(option);
+                          setFilterDropdownOpen(false);
+                        }}
+                        className="block w-full text-left px-4 py-2 hover:bg-gray-200 text-teal font-semibold"
+                      >
+                        {option}
+                      </button>
+                    ))}
                   </div>
                 )}
               </div>
 
               {/* Filtered Comments */}
-              {filteredOptions.map((option, index) => (
+              {sortedOptions.map((option, index) => (
                 <div
                   key={index}
                   className="w-full max-w-screen-lg p-4 text-lg text-teal border border-gray-300 rounded-lg bg-white shadow-lg"
@@ -188,7 +186,7 @@ const Intro = () => {
                     <button
                       onClick={() => handleUpvote(index)}
                       className={`flex items-center space-x-1 px-2 py-1 rounded ${
-                        votes[index].userVoted === "up"
+                        option.userVoted === "up"
                           ? "bg-green-500 text-white"
                           : "bg-gray-200 text-gray-700"
                       }`}
@@ -198,13 +196,13 @@ const Intro = () => {
                         alt="Thumbs Up"
                         className="w-4 h-4"
                       />
-                      <span>{votes[index].upvotes}</span>
+                      <span>{option.upvotes}</span>
                     </button>
 
                     <button
                       onClick={() => handleDownvote(index)}
                       className={`flex items-center space-x-1 px-2 py-1 rounded ${
-                        votes[index].userVoted === "down"
+                        option.userVoted === "down"
                           ? "bg-red-500 text-white"
                           : "bg-gray-200 text-gray-700"
                       }`}
@@ -214,7 +212,7 @@ const Intro = () => {
                         alt="Thumbs Down"
                         className="w-4 h-4"
                       />
-                      <span>{votes[index].downvotes}</span>
+                      <span>{option.downvotes}</span>
                     </button>
                   </div>
 
