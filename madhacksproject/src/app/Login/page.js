@@ -1,20 +1,23 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import Link from "next/link";
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation'; // Import the useRouter hook
+import Link from 'next/link';
 
 function LoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const router = useRouter(); // Initialize the router
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:5001/login', {  // Assuming you're using a Next.js API route for the backend
-        method: "POST",
+      const response = await fetch('http://localhost:5001/login', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ username, password }),
       });
@@ -22,14 +25,15 @@ function LoginPage() {
       const data = await response.json();
 
       if (response.ok) {
-        console.log("Login successful:", data);
-        // Redirect or set user session
+        console.log('Login successful:', data);
+        // Redirect to the discussion page after successful login
+        router.push('/Discussion');
       } else {
         setError(data.message); // Display the error message
       }
     } catch (error) {
-      setError("An error occurred. Please try again later.");
-      console.error("Error during login:", error);
+      setError('An error occurred. Please try again later.');
+      console.error('Error during login:', error);
     }
   };
 
@@ -50,6 +54,12 @@ function LoginPage() {
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800 drop-shadow-md">
           Log In
         </h2>
+
+        {error && (
+          <div className="text-red-600 text-center mb-4">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
@@ -94,7 +104,7 @@ function LoginPage() {
 
         <div className="text-center mt-4">
           <p className="text-gray-700">
-            Don't have an account?{" "}
+            Don't have an account?{' '}
             <Link href="/signup" className="text-orange hover:underline">
               Sign up!
             </Link>
