@@ -1,8 +1,11 @@
 "use client"; // Add this line at the top
 
 import React, { useState } from "react";
+import { useRouter } from 'next/navigation';
 
 const CategoriesList = () => {
+  const router = useRouter();
+
   // Separate categories into two lists
   const prioritizedCategories = [
     "Politics",
@@ -22,16 +25,29 @@ const CategoriesList = () => {
     "Movies",
   ];
 
-  // State to track which categories are clicked
-  const [clickedCategories, setClickedCategories] = useState([]);
+  // State to track the selected category (only one at a time)
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
-  // Toggle the clicked state of a category
+  // Handle category click (only allow one category to be selected)
   const handleCategoryClick = (category) => {
-    setClickedCategories((prevClickedCategories) =>
-      prevClickedCategories.includes(category)
-        ? prevClickedCategories.filter((item) => item !== category)
-        : [...prevClickedCategories, category]
+    setSelectedCategory((prevSelectedCategory) =>
+      prevSelectedCategory === category ? null : category
     );
+  };
+
+  // Handle form submission
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (!selectedCategory) {
+      console.error("No category selected");
+      return;
+    }
+
+    // Process the selected category (e.g., send it to a server or update the state)
+    console.log("Selected category:", selectedCategory);
+    // For example, if you want to send it to an API, you can do that here
+    router.push('/question');
   };
 
   return (
@@ -57,7 +73,7 @@ const CategoriesList = () => {
               key={index}
               onClick={() => handleCategoryClick(category)}
               className={`px-8 py-4 rounded-lg shadow-lg text-2xl font-semibold mb-4 ${
-                clickedCategories.includes(category)
+                selectedCategory === category
                   ? "bg-blue-500 text-white"
                   : "bg-orange-500 text-orange"
               }`}
@@ -79,7 +95,7 @@ const CategoriesList = () => {
               key={index}
               onClick={() => handleCategoryClick(category)}
               className={`px-8 py-4 rounded-lg shadow-lg text-2xl font-semibold mb-4 ${
-                clickedCategories.includes(category)
+                selectedCategory === category
                   ? "bg-blue-500 text-white"
                   : "bg-orange-500 text-orange"
               }`}
@@ -88,6 +104,16 @@ const CategoriesList = () => {
             </button>
           ))}
         </div>
+      </div>
+
+      {/* Submit Button */}
+      <div className="z-10">
+        <button
+          onClick={handleSubmit}
+          className="px-8 py-4 rounded-lg shadow-lg text-2xl font-semibold bg-green-500 text-white"
+        >
+          Submit
+        </button>
       </div>
     </div>
   );
