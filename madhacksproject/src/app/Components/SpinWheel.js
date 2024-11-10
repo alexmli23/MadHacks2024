@@ -88,7 +88,7 @@ const WheelOfFortune = () => {
       .attr('class', 'slice');
 
     arcs.append('path')
-      .attr('fill', blueColor)
+        .attr('fill', '#F6995C')
       .attr('d', arc)
       .attr('stroke', '#f9f9f9')
       .attr('stroke-width', '2px');
