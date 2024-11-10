@@ -84,10 +84,10 @@ const Question = () => {
             {question ? question : '(Question)'}
           </div>
           <form className="flex flex-col items-center w-full">
-            <textarea
-              placeholder="Your answer"
-              className="w-full h-32 p-2 border border-gray-400 rounded-md resize-none focus:outline-none focus:border-blue-500"
-            ></textarea>
+          <textarea
+        placeholder="Your answer"
+        className="w-full h-32 p-2 border border-gray-400 rounded-md resize-none focus:outline-none focus:border-blue-500 text-black"
+      ></textarea>
             <button
               type="submit"
               className={`${buttonColor} mt-4 px-4 py-2 text-white rounded-md hover:opacity-90 focus:outline-none`}
