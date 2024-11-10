@@ -1,13 +1,19 @@
-import React from "react";
+"use client"; // Add this line at the top
+
+import React, { useState } from "react";
 
 const CategoriesList = () => {
-  const categories = [
+  // Separate categories into two lists
+  const prioritizedCategories = [
     "Politics",
     "Food",
     "Sports",
     "Entertainment",
     "Art",
     "Gaming",
+  ];
+
+  const otherCategories = [
     "Education",
     "Technology",
     "Beauty",
@@ -15,6 +21,18 @@ const CategoriesList = () => {
     "Labor",
     "Movies",
   ];
+
+  // State to track which categories are clicked
+  const [clickedCategories, setClickedCategories] = useState([]);
+
+  // Toggle the clicked state of a category
+  const handleCategoryClick = (category) => {
+    setClickedCategories((prevClickedCategories) =>
+      prevClickedCategories.includes(category)
+        ? prevClickedCategories.filter((item) => item !== category)
+        : [...prevClickedCategories, category]
+    );
+  };
 
   return (
     <div className="relative flex flex-col justify-between items-center min-h-screen">
@@ -34,13 +52,18 @@ const CategoriesList = () => {
           Prioritized Interests
         </h2>
         <div className="flex flex-wrap justify-center items-center space-x-4">
-          {categories.map((category, index) => (
-            <div
+          {prioritizedCategories.map((category, index) => (
+            <button
               key={index}
-              className="px-8 py-4 bg-orange-500 text-white text-center rounded-lg shadow-lg text-2xl font-semibold mb-4"
+              onClick={() => handleCategoryClick(category)}
+              className={`px-8 py-4 rounded-lg shadow-lg text-2xl font-semibold mb-4 ${
+                clickedCategories.includes(category)
+                  ? "bg-blue-500 text-white"
+                  : "bg-orange-500 text-orange"
+              }`}
             >
               {category}
-            </div>
+            </button>
           ))}
         </div>
       </div>
@@ -51,13 +74,18 @@ const CategoriesList = () => {
           Other Categories
         </h2>
         <div className="flex flex-wrap justify-center items-center space-x-4">
-          {categories.map((category, index) => (
-            <div
+          {otherCategories.map((category, index) => (
+            <button
               key={index}
-              className="px-8 py-4 bg-orange-500 text-white text-center rounded-lg shadow-lg text-2xl font-semibold mb-4"
+              onClick={() => handleCategoryClick(category)}
+              className={`px-8 py-4 rounded-lg shadow-lg text-2xl font-semibold mb-4 ${
+                clickedCategories.includes(category)
+                  ? "bg-blue-500 text-white"
+                  : "bg-orange-500 text-orange"
+              }`}
             >
               {category}
-            </div>
+            </button>
           ))}
         </div>
       </div>
