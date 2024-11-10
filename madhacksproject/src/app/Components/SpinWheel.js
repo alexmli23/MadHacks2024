@@ -6,6 +6,7 @@ const WheelOfFortune = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [interests, setInterests] = useState([String]);
   const interestQuestions = [
     { label: 'Politics', question: 'Was the 2024 Presidential Election Rigged?' },
     { label: 'Food', question: 'Is Spray Cheese Real?' },
@@ -47,17 +48,28 @@ const WheelOfFortune = () => {
         console.log("Fetching interests for userId:", userId);
         const response = await fetch(`http://localhost:5001/get-interests/${userId}`);
         const result = await response.json();
-
+        console.log("Fetched result from backend:", result);
+    
         if (response.ok) {
+          console.log(result.interests);
+          setInterests(result.interests);
+          console.log(interests);
           const interestsData = result.interests
             .map(interest => {
+              console.log("Processing interest:", interest); // Debugging line
               const matchingQuestion = interestQuestions.find(item => item.label === interest);
+              console.log("Matching question:", matchingQuestion); // Debugging line
               return matchingQuestion ? {
                 label: matchingQuestion.label,
                 question: matchingQuestion.question,
               } : null;
             })
             .filter(item => item !== null);
+    
+          if (interestsData.length < 14) {
+            console.warn(`Only ${interestsData.length} interests fetched out of 14.`);
+          }
+    
           setData(interestsData);
           console.log("Fetched interests:", interestsData);
         } else {
@@ -68,7 +80,7 @@ const WheelOfFortune = () => {
         console.error('Error fetching interests:', error);
         setError("Failed to fetch interests.");
       }
-    };
+    };    
 
     fetchInterests();
   }, [userId]);
