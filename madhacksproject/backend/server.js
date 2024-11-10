@@ -1,7 +1,6 @@
+// server.js
 const express = require('express');
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -10,10 +9,9 @@ const app = express();
 
 // Middleware
 app.use(express.json()); // to parse JSON bodies
-app.use(cors({ origin: 'http://localhost:3000' })); // to allow cross-origin requests
+app.use(cors({ origin: 'http://localhost:3000' })); // allow cross-origin requests
 
 const mongoURI = process.env.MONGO_URI;
-console.log(mongoURI);
 
 // MongoDB connection
 mongoose.connect(mongoURI)
@@ -22,59 +20,87 @@ mongoose.connect(mongoURI)
 
 // Define User model
 const userSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    interests: { type: [String], required: false, default: [] }
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true }, // Plain text for demo
+  interests: { type: [String], required: false, default: [] }
 });
 
 const User = mongoose.model('User', userSchema);
 
 // Login route
 app.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-  
-    try {
-      const user = await User.findOne({ name: username }); // or use email if you prefer email for login
-  
-      if (!user) {
-        console.log("username not found");
-        return res.status(400).json({ message: "User not found!" });
-      }
-  
-      // Compare passwords
-      if (password !== user.password) {
-        console.log("password not right");
-        return res.status(400).json({ message: "Invalid credentials!" });
-      }
-  
-      console.log("login successful");
-      res.status(200).json({ message: "Login successful!", user });
-    } catch (error) {
-      res.status(500).json({ message: "Server error", error });
+  const { username, password } = req.body;
+
+  try {
+    const user = await User.findOne({ name: username });
+
+    if (!user) {
+      return res.status(400).json({ message: "User not found!" });
     }
+
+    // Compare plain text passwords for demo
+    if (password !== user.password) {
+      return res.status(400).json({ message: "Invalid credentials!" });
+    }
+
+    res.status(200).json({ message: "Login successful!", user });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
 });
 
+// Signup route
 app.post('/signup', async (req, res) => {
-    const { name, email, password } = req.body;
-  
-    try {
-      const newUser = new User({
-        name,
-        email,
-        password, // You should hash the password in a real-world scenario
-        interests: []
-      });
-      await newUser.save();
-      console.log("user created successfully: " + newUser);
-      res.status(201).json({ message: "User created successfully", user: newUser });
-    } catch (error) {
-        console.log("error creating user");
-      res.status(400).json({ error: error.message });
+  const { name, email, password } = req.body;
+
+  try {
+    const newUser = new User({
+      name,
+      email,
+      password, // Plain text for demo
+      interests: []
+    });
+
+    await newUser.save();
+    console.log("User created successfully:", newUser);
+
+    // Return userId for tracking
+    res.status(201).json({ message: "User created successfully", userId: newUser._id.toString() });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// Update interests route
+app.post('/update-interests', async (req, res) => {
+  const { userId, interests } = req.body;
+
+  try {
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      console.error('Invalid userId:', userId);
+      return res.status(400).json({ message: "Invalid user ID" });
     }
+
+    console.log('Updating userId:', userId); // Debugging
+    console.log('New interests:', interests); // Debugging
+
+    const user = await User.findByIdAndUpdate(userId, { interests }, { new: true });
+
+    if (!user) {
+      console.error('User not found for userId:', userId);
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "Interests updated successfully", user });
+  } catch (error) {
+    console.error('Error updating interests:', error);
+    res.status(500).json({ message: "Failed to update interests", error: error.message });
+  }
 });
 
 // Start server
 app.listen(5001, () => {
   console.log('Server running on port 5001');
 });
+

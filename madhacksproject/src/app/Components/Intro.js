@@ -10,10 +10,10 @@ const Intro = () => {
     "Is Fan Art a Real Art Form?",
     "Valorant: Should Chamber Be Nerfed?",
     "Should University Tuition Cost Less?",
-    "Is the Metaverse Progress or Dystopian?",
+    "Is the Metaverse Innovation or Dystopian?",
     "Sephora, Ulta Beauty, or Drugstore Products?",
     "Is Harry Potter Really a Gryffindor?",
-    "Are Workers' Unions Progressive or Mutiny?",
+    "Are Workers' Unions Beneficial or Mutiny?",
     "Should Disney Keep Making Live-Action Movies of Their Classics?",
     "What’s a Trend that Should Stop?",
   ];
@@ -83,10 +83,10 @@ const Intro = () => {
 
       {/* Main Content */}
       <div className="relative flex flex-col justify-center items-center w-full h-full px-8 text-center">
-        <h2 className="text-4xl text-darkerorange font-sans font-extrabold mb-2">
+        <h2 className="text-4xl text-darkerorange font-extrabold mb-2">
           {categories[categoryIndex]}
         </h2>
-        <h1 className="text-8xl text-teal font-serif mb-8 px-8">
+        <h1 className="text-8xl text-teal font-serif mb-8 px-8 max-w-6xl mx-auto">
           {displayedText}
         </h1>
         <Link href="/Discussion">
