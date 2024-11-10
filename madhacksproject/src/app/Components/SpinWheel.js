@@ -1,10 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import * as d3 from 'd3';
+import { useRouter } from 'next/navigation';
 
 const WheelOfFortune = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [userId, setUserId] = useState(null);
+  const interestQuestions = [
+    { label: 'politics', question: 'Was the 2024 Presidential Election Rigged?' },
+    { label: 'food', question: 'Is Spray Cheese Real?' },
+    { label: 'sports', question: 'Who Will Make It to the Super Bowl?' },
+    { label: 'popCulture', question: 'Who Does Not Deserve a Grammy Nomination?' },
+    { label: 'art', question: 'Is Fan Art a Real Art Form?' },
+    { label: 'gaming', question: 'Valorant: Should Chamber Be Nerfed?' },
+    { label: 'scienceEducation', question: 'Should University Tuition Cost Less?' },
+    { label: 'tech', question: 'Is the Metaverse Innovation or Dystopian?' },
+    { label: 'financeEconomics', question: 'What is your take on the current economic trends?' },
+    { label: 'beauty', question: 'Sephora, Ulta Beauty, or Drugstore Products?' },
+    { label: 'books', question: 'Is Harry Potter Really a Gryffindor?' },
+    { label: 'business', question: 'Are Workers\' Unions Beneficial or Mutiny?' },
+    { label: 'tvMovies', question: 'Should Disney Keep Making Live-Action Movies of Their Classics?' },
+    { label: 'fashion', question: 'What\'s a Trend that Should Stop?' },
+  ];
+
+  const router = useRouter();
 
   // Retrieve and validate the userId from localStorage only once on component mount
   useEffect(() => {
@@ -33,10 +52,18 @@ const WheelOfFortune = () => {
 
         if (response.ok) {
           // Map the interests to the data format required for the wheel
-          const interestsData = result.interests.map(interest => ({
-            label: interest,
-            question: `Tell me something about ${interest}?`,
-          }));
+          const interestsData = result.interests
+          .map(interest => {
+            // Find the matching question from the predefined `interestQuestions` array
+            const matchingQuestion = interestQuestions.find(item => item.label === interest);
+
+            // Only include the interest if a matching question is found
+            return matchingQuestion ? {
+              label: matchingQuestion.label,
+              question: matchingQuestion.question,
+            } : null;
+          })
+          .filter(item => item !== null);
           setData(interestsData);
           console.log("Fetched interests:", interestsData); // Debugging log
         } else {
@@ -123,7 +150,21 @@ const WheelOfFortune = () => {
           return t => `rotate(${interpolateRotation(t)})`;
         })
         .on('end', () => {
-          d3.select('#question h1').text(data[randomIndex].question);
+          const selected = data[randomIndex];
+          console.log(selected.label);
+          console.log(selected.question);
+          d3.select('#question h1').text(selected.question);
+          console.log("Pushing to router:", {
+            pathname: '/question',
+            query: { interest: selected.label, question: selected.question }
+          });
+          router.push({
+            pathname: "/question", // Assuming your question page is at /question
+            query: {
+              interest: encodeURIComponent(selected.label),
+              question: encodeURIComponent(selected.question)
+            },
+          });
           container.on('click', spin);
         });
     }

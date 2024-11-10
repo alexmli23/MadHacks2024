@@ -6,20 +6,20 @@ import { useRouter } from 'next/navigation';
 function InterestsPage() {
   const [userId, setUserId] = useState(null);
   const [interests, setInterests] = useState({
-    politics: false,
-    food: false,
-    sports: false,
-    popCulture: false,
-    art: false,
-    gaming: false,
-    scienceEducation: false,
-    tech: false,
-    financeEconomics: false,
-    beauty: false,
-    books: false,
-    business: false,
-    tvMovies: false,
-    fashion: false,
+    Politics: false,
+    Food: false,
+    Sports: false,
+    PopCulture: false,
+    Art: false,
+    Gaming: false,
+    ScienceEducation: false,
+    Tech: false,
+    FileinanceEconomics: false,
+    Beauty: false,
+    Books: false,
+    Business: false,
+    TVMovies: false,
+    Fashion: false,
   });
 
   const router = useRouter();
