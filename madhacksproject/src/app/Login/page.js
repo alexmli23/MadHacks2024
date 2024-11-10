@@ -49,6 +49,8 @@ function LoginPage() {
         className="absolute top-0 left-0 w-full h-full object-cover -z-10"
       ></video>
 
+<Link href="/"> <img src="/Assets/logo_icon.png" alt="the Orange Opinions Icon" className="absolute top-6 left-7 h-13 w-full max-w-[80px] object-contain mx-auto"/></Link>
+
       {/* Login Form with Blurred Glass Effect */}
       <div className="relative bg-eggshell bg-opacity-90 backdrop-blur-md p-8 rounded-lg shadow-lg max-w-md w-full text-gray-900">
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800 drop-shadow-md">
