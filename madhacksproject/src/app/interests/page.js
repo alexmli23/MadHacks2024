@@ -9,16 +9,16 @@ function InterestsPage() {
     Politics: false,
     Food: false,
     Sports: false,
-    PopCulture: false,
+    Entertainment: false,
     Art: false,
     Gaming: false,
-    ScienceEducation: false,
+    Education: false,
     Tech: false,
-    FileinanceEconomics: false,
+    Finance: false,
     Beauty: false,
-    Books: false,
+    Literature: false,
     Business: false,
-    TVMovies: false,
+    Movies: false,
     Fashion: false,
   });
 
@@ -76,7 +76,8 @@ function InterestsPage() {
     <div className="relative flex items-center justify-center min-h-screen">
       <video src="/Assets/background.mp4" autoPlay loop muted playsInline className="absolute top-0 left-0 w-full h-full object-cover -z-10"></video>
 
-      <h2 className="text-3xl font-bold mb-6 text-gray-800 drop-shadow-md">Select at least 5 Interests to start</h2>
+      <div>
+        <h2 className="text-3xl text-darkerteal font-bold mb-6 text-gray-800 drop-shadow-md">Select at least <span className="text-orange">5 Interests</span> to start:</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
@@ -96,10 +97,9 @@ function InterestsPage() {
           DONE
         </button>
       </form>
+      </div>
     </div>
   );
 }
 
 export default InterestsPage;
-
-     
