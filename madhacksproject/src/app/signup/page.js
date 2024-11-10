@@ -1,26 +1,22 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from "next/link";
-import { useRouter } from 'next/navigation'; // Updated import for `useRouter` from Next.js app directory
+import { useRouter } from 'next/navigation';
 
 function SignupPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [interests, setInterests] = useState([]);
   const [submitted, setSubmitted] = useState(false);
 
-  const router = useRouter(); // Initialize the router
+  const router = useRouter();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
-    const payload = { name, email, password, interests };
-    console.log('Signup data:', { name, email, interests });
+
+    const payload = { name, email, password };
 
     try {
-      // Send the signup data to your backend
       const response = await fetch('http://localhost:5001/signup', {
         method: 'POST',
         headers: {
@@ -30,11 +26,16 @@ function SignupPage() {
       });
 
       const data = await response.json();
-      
+
       if (response.ok) {
         console.log('Signup successful:', data);
         setSubmitted(true);
-        // Redirect to the "interests" page after submission
+
+        // Store user ID for tracking
+        localStorage.setItem('userId', data.userId);
+        console.log('Stored userId:', data.userId);
+
+        // Redirect to the "interests" page after signup
         router.push('/interests');
       } else {
         console.log('Signup error:', data);
@@ -46,26 +47,8 @@ function SignupPage() {
 
   return (
     <div className="relative flex items-center justify-center min-h-screen">
-      {/* Background Video */}
-      <video
-        src="/Assets/background.mp4"
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute top-0 left-0 w-full h-full object-cover -z-10"
-      ></video>
+      <video src="/Assets/background.mp4" autoPlay loop muted playsInline className="absolute top-0 left-0 w-full h-full object-cover -z-10"></video>
 
-      {/* Header with Login Button */}
-      <header className="absolute top-0 w-full bg-eggshell bg-opacity-60 h-16 flex items-center justify-end px-8 z-10">
-        <Link href="/interests">
-          <button className=" text-darkerorange text-2xl font-semibold text-theorange hover:underline">
-            temp to interests
-          </button>
-        </Link>
-      </header>
-
-      {/* Sign Up Form with Blurred Glass Effect */}
       <div className="relative bg-eggshell bg-opacity-90 backdrop-blur-md p-8 rounded-lg shadow-lg max-w-md w-full text-gray-900">
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800 drop-shadow-md">Sign Up</h2>
         
@@ -104,24 +87,17 @@ function SignupPage() {
             />
           </div>
 
-          {/* Conditionally render the button */}
           {!submitted && (
             <button type="submit" className="w-full py-2 px-4 bg-orange text-white font-semibold rounded-md hover:bg-darkerorange transition duration-200">
               Next
             </button>
           )}
         </form>
-        <div className="text-center mt-4">
-          <p className="text-gray-700">
-            Already have an account?{' '}
-            <Link href="/login" className="text-orange hover:underline">
-              Log In!
-            </Link>
-          </p>
-        </div>
       </div>
     </div>
   );
 }
 
 export default SignupPage;
+
+
