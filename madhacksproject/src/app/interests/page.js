@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 function InterestsPage() {
   const [userId, setUserId] = useState(null);
@@ -20,6 +21,8 @@ function InterestsPage() {
     tvMovies: false,
     fashion: false,
   });
+
+  const router = useRouter();
 
   useEffect(() => {
     const storedUserId = localStorage.getItem('userId');
@@ -58,6 +61,8 @@ function InterestsPage() {
 
       if (response.ok) {
         console.log('Interests updated successfully');
+        // Redirect to the "discussion" page after signup
+        router.push('/Discussion');
       } else {
         const errorData = await response.json();
         console.error('Failed to update interests:', errorData.message);

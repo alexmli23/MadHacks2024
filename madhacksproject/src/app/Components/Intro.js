@@ -15,7 +15,7 @@ const Intro = () => {
     "Is Harry Potter Really a Gryffindor?",
     "Are Workers' Unions Beneficial or Mutiny?",
     "Should Disney Keep Making Live-Action Movies of Their Classics?",
-    "What’s a Trend that Should Stop?"
+    "What’s a Trend that Should Stop?",
   ];
 
   const categories = [
@@ -29,7 +29,7 @@ const Intro = () => {
     "TECHNOLOGY",
     "BEAUTY",
     "LITERATURE",
-    "LABOR",
+    "BUSINESS",
     "MOVIES",
     "FASHION",
   ];
@@ -72,8 +72,13 @@ const Intro = () => {
         className="absolute top-0 left-0 w-full h-full object-cover"
       ></video>
 
-      {/* Header with Login Button */}
-      <header className="absolute top-0 w-full bg-eggshell bg-opacity-60 h-16 flex items-center justify-end px-8 z-10">
+      {/* Header with Login Button and Logo */}
+      <header className="absolute top-0 w-full bg-eggshell bg-opacity-60 h-20 flex items-center justify-end px-8 z-10">
+      <img
+        src="Assets/logo_text.png" 
+        alt="the Orange Opinion"
+        className="w-full max-w-[300px] object-contain mx-auto"
+      />
         <Link href="/login">
           <button className=" text-darkerorange text-2xl font-semibold text-theorange hover:underline">
             Login
@@ -89,11 +94,14 @@ const Intro = () => {
         <h1 className="text-8xl text-teal font-serif mb-8 px-8 max-w-6xl mx-auto">
           {displayedText}
         </h1>
-        <Link href="/Discussion">
+        <p className="text-darkerorange text-3xl bg-transparent border-none py-4 text-theorange">
+          Login and Discuss!
+        </p>
+        {/* <Link href="/Discussion">
           <button className="text-darkerorange text-3xl bg-transparent border-none cursor-pointer py-4 text-theorange hover:underline">
             Find out and Discuss!
           </button>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

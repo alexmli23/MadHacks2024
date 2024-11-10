@@ -13,10 +13,10 @@ function LoginPage() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:5001/login', {
-        method: 'POST',
+      const response = await fetch("http://localhost:5001/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ username, password }),
       });
@@ -41,8 +41,8 @@ function LoginPage() {
         setError(data.message || 'Failed to log in.');
       }
     } catch (error) {
-      setError('An error occurred. Please try again later.');
-      console.error('Error during login:', error);
+      setError("An error occurred. Please try again later.");
+      console.error("Error during login:", error);
     }
   };
 
@@ -77,3 +77,4 @@ function LoginPage() {
 }
 
 export default LoginPage;
+
