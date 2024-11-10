@@ -1,14 +1,13 @@
-"use client";
-
-import React, { useState } from "react";
-import { useRouter } from "next/navigation"; // Import the useRouter hook
-import Link from "next/link";
+"use client"
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 function LoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const router = useRouter(); // Initialize the router
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const router = useRouter();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -25,11 +24,21 @@ function LoginPage() {
       const data = await response.json();
 
       if (response.ok) {
-        console.log("Login successful:", data);
-        // Redirect to the discussion page after successful login
-        router.push("/Discussion");
+        console.log('Login successful:', data);
+
+        // Ensure userId is defined and exists in the response before setting it
+        if (data.user && data.user._id) {
+          localStorage.setItem('userId', data.user._id); // Store userId from data.user._id
+          console.log('Stored userId:', data.user._id);
+          
+          // Redirect to the discussion page after successful login
+          router.push('/Discussion');
+        } else {
+          console.error("userId is missing in response data.");
+          setError("Login response is missing userId. Please try again.");
+        }
       } else {
-        setError(data.message); // Display the error message
+        setError(data.message || 'Failed to log in.');
       }
     } catch (error) {
       setError("An error occurred. Please try again later.");
@@ -39,80 +48,27 @@ function LoginPage() {
 
   return (
     <div className="relative flex items-center justify-center min-h-screen">
-      {/* Background Video */}
-      <video
-        src="/Assets/background.mp4"
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute top-0 left-0 w-full h-full object-cover -z-10"
-      ></video>
+      <video src="/Assets/background.mp4" autoPlay loop muted playsInline className="absolute top-0 left-0 w-full h-full object-cover -z-10"></video>
 
-      {/* Header with Back Button */}
-      <header className="absolute top-0 left-0 w-full h-16 flex items-center z-10">
-        <Link href="/" className="ml-4">
-          <button className="text-darkerorange text-2xl font-semibold hover:underline">
-            Back
-          </button>
-        </Link>
-      </header>
-
-      {/* Login Form with Blurred Glass Effect */}
       <div className="relative bg-eggshell bg-opacity-90 backdrop-blur-md p-8 rounded-lg shadow-lg max-w-md w-full text-gray-900">
-        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800 drop-shadow-md">
-          Log In
-        </h2>
-
+        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800 drop-shadow-md">Log In</h2>
         {error && <div className="text-red-600 text-center mb-4">{error}</div>}
-
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label
-              htmlFor="username"
-              className="block text-gray-700 font-medium mb-2"
-            >
-              Username:
-            </label>
-            <input
-              type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Enter your username"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <label htmlFor="username" className="block text-gray-700 font-medium mb-2">Username:</label>
+            <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Enter your username" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
           </div>
           <div>
-            <label
-              htmlFor="password"
-              className="block text-gray-700 font-medium mb-2"
-            >
-              Password:
-            </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <label htmlFor="password" className="block text-gray-700 font-medium mb-2">Password:</label>
+            <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
           </div>
-          <button
-            type="submit"
-            className="w-full py-2 px-4 bg-orange text-white font-semibold rounded-md hover:bg-darkerorange transition duration-200"
-          >
-            Log In
-          </button>
+          <button type="submit" className="w-full py-2 px-4 bg-orange text-white font-semibold rounded-md hover:bg-darkerorange transition duration-200">Log In</button>
         </form>
 
         <div className="text-center mt-4">
           <p className="text-gray-700">
-            Don't have an account?{" "}
-            <Link href="/signup" className="text-orange hover:underline">
-              Sign up!
-            </Link>
+            Don't have an account?{' '}
+            <Link href="/signup" className="text-orange hover:underline">Sign up!</Link>
           </p>
         </div>
       </div>
@@ -121,3 +77,4 @@ function LoginPage() {
 }
 
 export default LoginPage;
+

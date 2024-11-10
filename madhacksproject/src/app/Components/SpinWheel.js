@@ -1,27 +1,67 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as d3 from 'd3';
 
 const WheelOfFortune = () => {
-  const data = [
-    { label: 'Dell LAPTOP', question: 'What CSS property is used for specifying the area between the content and its border?' },
-    { label: 'IMAC PRO', question: 'What CSS property is used for changing the font?' },
-    { label: 'SUZUKI', question: 'What CSS property is used for changing the color of text?' },
-    { label: 'HONDA', question: 'What CSS property is used for changing the boldness of text?' },
-    { label: 'FERRARI', question: 'What CSS property is used for changing the size of text?' },
-    { label: 'APARTMENT', question: 'What CSS property is used for changing the background color of a box?' },
-    { label: 'IPAD PRO', question: 'Which word is used for specifying an HTML tag that is inside another tag?' },
-    { label: 'LAND', question: 'Which side of the box is the third number in: margin:1px 1px 1px 1px;' },
-    { label: 'MOTOROLLA', question: "What are the fonts that don't have serifs at the ends of letters called?" },
-    { label: 'BMW', question: 'With CSS selectors, what character prefix should one use to specify a class?' },
-  ];
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+  const [userId, setUserId] = useState(null);
 
+  // Retrieve and validate the userId from localStorage only once on component mount
   useEffect(() => {
+    const storedUserId = localStorage.getItem('userId');
+    if (storedUserId) {
+      setUserId(storedUserId);
+      console.log("Retrieved userId from localStorage:", storedUserId); // Debugging log
+    } else {
+      console.error("User ID is missing in localStorage");
+      setError("User ID is missing. Please log in again.");
+    }
+  }, []);
+
+  // Fetch interests only if userId is defined and valid
+  useEffect(() => {
+    if (!userId) {
+      console.warn("No valid userId found; skipping fetch.");
+      return;
+    }
+
+    const fetchInterests = async () => {
+      try {
+        console.log("Fetching interests for userId:", userId); // Debugging log
+        const response = await fetch(`http://localhost:5001/get-interests/${userId}`);
+        const result = await response.json();
+
+        if (response.ok) {
+          // Map the interests to the data format required for the wheel
+          const interestsData = result.interests.map(interest => ({
+            label: interest,
+            question: `Tell me something about ${interest}?`,
+          }));
+          setData(interestsData);
+          console.log("Fetched interests:", interestsData); // Debugging log
+        } else {
+          console.error('Error fetching interests:', result.message);
+          setError(result.message || "Failed to fetch interests.");
+        }
+      } catch (error) {
+        console.error('Error fetching interests:', error);
+        setError("Failed to fetch interests.");
+      }
+    };
+
+    fetchInterests();
+  }, [userId]);
+
+  // Render the wheel only if data is available
+  useEffect(() => {
+    if (data.length === 0) return;
+
     d3.select('#chart').selectAll('*').remove();
 
     const width = 400;
     const height = 400;
     const radius = Math.min(width, height) / 2;
-    const blueColor = '#FFA500'; // Equivalent to bg-blue-400 ACTUALLY ORANGE
+    const blueColor = '#1E90FF';
 
     const svg = d3.select('#chart')
       .append('svg')
@@ -31,19 +71,6 @@ const WheelOfFortune = () => {
       .style('max-width', '100%')
       .style('height', 'auto')
       .style('background-color', '#f9f9f9');
-
-    const grooveSpacing = 5;
-    const grooveStartRadius = radius - 30;
-    for (let i = 0; i < 5; i++) {
-      svg.append("circle")
-        .attr("cx", width / 2)
-        .attr("cy", height / 2 + 25)
-        .attr("r", grooveStartRadius - i * grooveSpacing)
-        .attr("fill", "none")
-        .attr("stroke", "#e0e0e0")
-        .attr("stroke-width", 1)
-        .attr("opacity", 0.7);
-    }
 
     const container = svg.append('g')
       .attr('class', 'chartholder')
@@ -61,7 +88,7 @@ const WheelOfFortune = () => {
       .attr('class', 'slice');
 
     arcs.append('path')
-      .attr('fill', blueColor) // Apply blue color to all sections
+        .attr('fill', '#F6995C')
       .attr('d', arc)
       .attr('stroke', '#f9f9f9')
       .attr('stroke-width', '2px');
@@ -105,7 +132,12 @@ const WheelOfFortune = () => {
   }, [data]);
 
   return (
-    <div id="chart" className="w-[400px] h-[450px] bg-[#f9f9f9]"></div> 
+    <div id="chart" className="w-[400px] h-[450px] bg-[#f9f9f9]">
+      <div id="question" className="text-center mt-4">
+        <h1>Click the wheel to spin!</h1>
+      </div>
+      {error && <p className="text-red-500">{error}</p>}
+    </div>
   );
 };
 
