@@ -52,6 +52,15 @@ function SignupPage() {
         className="absolute top-0 left-0 w-full h-full object-cover -z-10"
       ></video>
 
+      {/* Header with Login Button */}
+      <header className="absolute top-0 w-full bg-eggshell bg-opacity-60 h-16 flex items-center justify-end px-8 z-10">
+        <Link href="/interests">
+          <button className=" text-darkerorange text-2xl font-semibold text-theorange hover:underline">
+            temp to interests
+          </button>
+        </Link>
+      </header>
+
       {/* Sign Up Form with Blurred Glass Effect */}
       <div className="relative bg-eggshell bg-opacity-90 backdrop-blur-md p-8 rounded-lg shadow-lg max-w-md w-full text-gray-900">
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800 drop-shadow-md">Sign Up</h2>
