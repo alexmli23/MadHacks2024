@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation'; // Updated import for `useRouter` from Next.js app directory
 
 function SignupPage() {
   const [name, setName] = useState('');
@@ -11,6 +10,8 @@ function SignupPage() {
   const [interests, setInterests] = useState([]);
   const [submitted, setSubmitted] = useState(false);
 
+  const router = useRouter(); // Initialize the router
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     
@@ -18,26 +19,28 @@ function SignupPage() {
     console.log('Signup data:', { name, email, interests });
 
     try {
-        // Send the signup data to your backend
-        const response = await fetch('http://localhost:5001/signup', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        });
-  
-        const data = await response.json();
-        
-        if (response.ok) {
-          console.log('Signup successful:', data);
-          setSubmitted(true);
-        } else {
-          console.log('Signup error:', data);
-        }
-      } catch (error) {
-        console.error('Error during signup:', error);
+      // Send the signup data to your backend
+      const response = await fetch('http://localhost:5001/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        console.log('Signup successful:', data);
+        setSubmitted(true);
+        // Redirect to the "interests" page after submission
+        router.push('/interests');
+      } else {
+        console.log('Signup error:', data);
       }
+    } catch (error) {
+      console.error('Error during signup:', error);
+    }
   };
 
   return (
@@ -90,29 +93,15 @@ function SignupPage() {
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          {/* <div>
-              <label htmlFor="interests">Pick your interests! (Minimum of 5)</label>
-              <input type="checkbox"
-          </div> */}
+
+          {/* Conditionally render the button */}
           {!submitted && (
             <button type="submit" className="w-full py-2 px-4 bg-orange text-white font-semibold rounded-md hover:bg-darkerorange transition duration-200">
               Next
             </button>
           )}
         </form>
-
-        {submitted && (
-          <div className="mt-4 text-center">
-            <p className="text-gray-700">
-              Signup successful!{" "}
-              <Link href="/interests" className="text-orange hover:underline">
-                Go to Interests
-              </Link>
-            </p>
-          </div>
-        )}
-
-        </div>        
+      </div>
     </div>
   );
 }
