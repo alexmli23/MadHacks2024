@@ -10,7 +10,7 @@ const Intro = () => {
     "Is Fan Art a Real Art Form?",
     "Valorant: Should Chamber Be Nerfed?",
     "Should University Tuition Cost Less?",
-    "Is the Metaverse Innovation or Dystopian?",
+    "Is the Metaverse Innovative or Dystopian?",
     "Sephora, Ulta Beauty, or Drugstore Products?",
     "Is Harry Potter Really a Gryffindor?",
     "Are Workers' Unions Beneficial or Mutiny?",
