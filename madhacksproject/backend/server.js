@@ -136,6 +136,8 @@ app.get('/get-interests/:userId', async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+    console.log(user);
+    console.log(user.interests);
     res.json({ interests: user.interests });
   } catch (error) {
     console.error('Server error:', error);

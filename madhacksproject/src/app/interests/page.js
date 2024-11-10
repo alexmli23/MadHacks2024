@@ -31,7 +31,11 @@ function InterestsPage() {
   }, []);
 
   const handleToggle = (interest) => {
-    setInterests((prevInterests) => ({ ...prevInterests, [interest]: !prevInterests[interest] }));
+    setInterests((prevInterests) => {
+      const updatedInterests = { ...prevInterests };
+      updatedInterests[interest] = !updatedInterests[interest];
+      return updatedInterests;
+    });
   };
 
   const handleSubmit = async (event) => {
