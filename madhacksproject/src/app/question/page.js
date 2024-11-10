@@ -1,12 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from 'next/navigation';
 
 const Question = () => {
   const [interest, setInterest] = useState("");
   const [question, setQuestion] = useState("");
   const [buttonColor, setButtonColor] = useState("bg-blue-500");
   const [loading, setLoading] = useState(true);
+  const [answer, setAnswer] = useState("");
 
   const interestQuestions = [
     { label: 'Politics', question: 'Was the 2024 Presidential Election Rigged?' },
@@ -24,6 +26,8 @@ const Question = () => {
     { label: 'TVMovies', question: 'Should Disney Keep Making Live-Action Movies of Their Classics?' },
     { label: 'Fashion', question: 'What\'s a Trend that Should Stop?' },
   ];
+
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUserInterest = async () => {
@@ -60,6 +64,48 @@ const Question = () => {
     fetchUserInterest();
   }, []);
 
+  // Handle the answer change
+  const handleAnswerChange = (event) => {
+    setAnswer(event.target.value); // Update the answer state as the user types
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    
+    const storedUserId = localStorage.getItem('userId');
+    if (!storedUserId) {
+      console.error("User ID is missing in localStorage");
+      return;
+    }
+
+    try {
+      // Send the user's answer to the backend
+      const response = await fetch('http://localhost:5001/save-answer', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: storedUserId,
+          interest: interest,
+          answer: answer, // Include the user's answer
+        }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        console.log('Answer saved successfully');
+        router.push('/answers');  // Redirect to the answers page (or any other page after saving)
+      } else {
+        console.log("Error saving answer");
+        console.error('Error saving answer:', data.message);
+      }
+    } catch (error) {
+      console.log("Error submitting answer");
+      console.error('Error submitting answer:', error);
+    }
+  };
+
   // Ensure the component only renders when interest and question are available
   if (loading) {
     return <div>Loading...</div>; // Or display a loading spinner
@@ -83,10 +129,12 @@ const Question = () => {
           <div className="bg-gray-200 text-gray-800 border border-gray-800 p-4 rounded-md w-full text-center">
             {question ? question : '(Question)'}
           </div>
-          <form className="flex flex-col items-center w-full">
+          <form className="flex flex-col items-center w-full" onSubmit={handleSubmit}>
             <textarea
+              value={answer} // Bind the value of the textarea to the answer state
+              onChange={handleAnswerChange} // Update answer state as user types
               placeholder="Your answer"
-              className="w-full h-32 p-2 border border-gray-400 rounded-md resize-none focus:outline-none focus:border-blue-500"
+              className="w-full h-32 p-2 border border-gray-400 rounded-md resize-none focus:outline-none focus:border-blue-500 text-black"
             ></textarea>
             <button
               type="submit"

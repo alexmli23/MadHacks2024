@@ -1,14 +1,32 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
 const Intro = () => {
-  const texts = ["Was the 2024 Presidential Election Rigged?"];
-  const categories = ["POLITICS"];
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [filterDropdownOpen, setFilterDropdownOpen] = useState(false);
   const [filter, setFilter] = useState("All");
+  const [userId, setUserId] = useState(null);
+  const [userAnswer, setUserAnswer] = useState(""); // Store user's answer
+  const [todayInterest, setTodayInterest] = useState("");
+  const [questionText, setQuestionText] = useState("");
+  const interestQuestions = [
+    { label: 'Politics', question: 'Was the 2024 Presidential Election Rigged?' },
+    { label: 'Food', question: 'Is Spray Cheese Real?' },
+    { label: 'Sports', question: 'Who Will Make It to the Super Bowl?' },
+    { label: 'PopCulture', question: 'Who Does Not Deserve a Grammy Nomination?' },
+    { label: 'Art', question: 'Is Fan Art a Real Art Form?' },
+    { label: 'Gaming', question: 'Valorant: Should Chamber Be Nerfed?' },
+    { label: 'ScienceEducation', question: 'Should University Tuition Cost Less?' },
+    { label: 'Tech', question: 'Is the Metaverse Innovation or Dystopian?' },
+    { label: 'FinanceEconomics', question: 'What is your take on the current economic trends?' },
+    { label: 'Beauty', question: 'Sephora, Ulta Beauty, or Drugstore Products?' },
+    { label: 'Books', question: 'Is Harry Potter Really a Gryffindor?' },
+    { label: 'Business', question: 'Are Workers\' Unions Beneficial or Mutiny?' },
+    { label: 'TVMovies', question: 'Should Disney Keep Making Live-Action Movies of Their Classics?' },
+    { label: 'Fashion', question: 'What\'s a Trend that Should Stop?' },
+  ];
 
   const options = [
     {
@@ -44,6 +62,57 @@ const Intro = () => {
     userVoted: null,
   }));
   const [votes, setVotes] = useState(initialVotes);
+
+  useEffect(() => {
+    const storedUserId = localStorage.getItem('userId');
+    if (storedUserId) {
+      setUserId(storedUserId);
+      console.log("Retrieved userId from localStorage:", storedUserId);
+    } else {
+      console.error("User ID is missing in localStorage");
+      setError("User ID is missing. Please log in again.");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!userId) {
+      console.warn("No valid userId found; skipping fetch.");
+      return;
+    }
+
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch("http://localhost:5001/find-user", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserAnswer(data.answer); // Set the user's answer
+          setTodayInterest(data.todayInterest); // Set today's interest
+        } else {
+          console.error("Error fetching user data:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    if (todayInterest) {
+      const selectedQuestion = interestQuestions.find(
+        (item) => item.label === todayInterest
+      );
+      setQuestionText(selectedQuestion ? selectedQuestion.question : "No question available.");
+    }
+  }, [todayInterest]);
 
   // Upvote function
   const handleUpvote = (index) => {
@@ -114,16 +183,16 @@ const Intro = () => {
 
         <div className="flex flex-col items-center w-full min-h-screen text-center z-20 pt-16">
           <h2 className="text-2xl text-darkerorange font-sans font-extrabold mb-2">
-            {categories[0]}
+            {todayInterest}
           </h2>
           <h1 className="text-4xl text-teal font-serif mb-4 px-8">
-            {texts[0]}
+            {questionText}
           </h1>
 
           {/* User Answer Box */}
           <div className="flex justify-center mt-4 w-full px-8">
             <div className="w-full max-w-screen-lg h-32 p-4 text-lg text-teal border border-gray-300 rounded-lg bg-white shadow-lg">
-              Placeholder for your answer to the question...
+              {userAnswer}
             </div>
           </div>
 

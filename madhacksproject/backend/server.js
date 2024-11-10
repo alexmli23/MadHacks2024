@@ -24,7 +24,8 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true }, // Plain text for demo
   interests: { type: [String], required: false, default: [] },
-  today: { type: String, required: false, default: ''}
+  today: { type: String, required: false, default: ''},
+  answer: { type: String, required: false, default: ''}
 });
 
 const User = mongoose.model('User', userSchema);
@@ -191,6 +192,67 @@ app.post('/update-today', async (req, res) => {
     } catch (error) {
       console.error('Error fetching user data:', error);
       res.status(500).json({ message: "Failed to fetch user data" });
+    }
+  });  
+
+  app.post('/save-answer', async (req, res) => {
+    const { userId, interest, answer } = req.body;
+  
+    // Check if all required fields are provided
+    if (!userId || !interest || !answer) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+  
+    try {
+      // Find the user by their userId
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      // Save the answer and today's interest in the user's document
+      user.answer = answer; // Save the provided answer
+      user.today = interest; // Store the current interest (this could be useful if you want to track daily questions)
+  
+      // Save the updated user document
+      await user.save();
+  
+      // Send a success response
+      res.status(200).json({ message: 'Answer saved successfully' });
+    } catch (error) {
+      console.error('Error saving answer:', error);
+      res.status(500).json({ message: 'Error saving answer' });
+    }
+  });
+
+  app.post('/find-user', async (req, res) => {
+    const { userId } = req.body;
+  
+    if (!userId) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+  
+    try {
+      const user = await User.findById(userId);
+      console.log("found user " + user);
+  
+      if (!user) {
+        console.log("user not found");
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      const answer = user.answer;
+      const interest = user.today;
+  
+      res.status(200).json({ 
+        message: 'User answer and today found',
+        answer: answer,
+        todayInterest: interest
+      });
+    } catch (error) {
+      console.error('Error finding answer:', error);
+      res.status(500).json({ message: 'Error finding answer' });
     }
   });  
 
