@@ -23,7 +23,8 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true }, // Plain text for demo
-  interests: { type: [String], required: false, default: [] }
+  interests: { type: [String], required: false, default: [] },
+  today: { type: String, required: false, default: ''}
 });
 
 const User = mongoose.model('User', userSchema);
@@ -142,6 +143,52 @@ app.get('/get-interests/:userId', async (req, res) => {
   }
 });
 
+// Update "today" interest
+app.post('/update-today', async (req, res) => {
+    const { userId, interest } = req.body;
+  
+    if (!userId || !interest) {
+      return res.status(400).json({ message: "Invalid input" });
+    }
+  
+    try {
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+      // Check if the user.today is already filled
+      if (user.today) {
+        // If user.today is filled, update it with the new interest
+        user.today = interest;
+        await user.save();
+        return res.status(200).json({ message: "Today interest updated successfully" });
+      } else {
+        // If user.today is not filled, send a message indicating no update
+        return res.status(400).json({ message: "User's 'today' interest is not filled yet. No update made." });
+      }
+    } catch (error) {
+      console.error("Error updating today interest:", error);
+      return res.status(500).json({ message: "Failed to update today interest" });
+    }
+  });
+  
+  app.get('/get-user-today/:userId', async (req, res) => {
+    const { userId } = req.params;
+  
+    try {
+      const user = await User.findById(userId); // Assuming you have a User model
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+      // Send back the user's "today" interest
+      res.status(200).json({ today: user.today });
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      res.status(500).json({ message: "Failed to fetch user data" });
+    }
+  });  
 
 // Start server
 app.listen(5001, () => {
