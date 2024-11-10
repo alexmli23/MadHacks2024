@@ -125,24 +125,20 @@ app.post('/login', async (req, res) => {
 });
 
 // server.js
-app.get('/get-interests/:userId', async (req, res) => {
-  const { userId } = req.params;
-
-  if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
-    return res.status(400).json({ message: "Invalid user ID format" });
-  }
+app.post('/answers-by-category', async (req, res) => {
+  const { category } = req.body;
 
   try {
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    console.log(user);
-    console.log(user.interests);
-    res.json({ interests: user.interests });
+    // Find all users with the matching 'today' interest category
+    const usersWithCategory = await User.find({ today: category }, 'answer');
+
+    // Map results to get an array of answers
+    const answers = usersWithCategory.map(user => user.answer);
+
+    res.status(200).json({ answers });
   } catch (error) {
-    console.error('Server error:', error);
-    res.status(500).json({ message: "Server error" });
+    console.error("Error fetching answers:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
@@ -255,6 +251,19 @@ app.post('/update-today', async (req, res) => {
       res.status(500).json({ message: 'Error finding answer' });
     }
   });  
+
+  app.post('/answers-by-category', async (req, res) => {
+    const { category } = req.body;
+    try {
+      // Assuming you have a MongoDB collection named "answers"
+      const answers = await db.collection('answers').find({ category }).toArray();
+      res.status(200).json({ answers });
+    } catch (error) {
+      console.error("Error fetching answers:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  });
+  
 
 // Start server
 app.listen(5001, () => {

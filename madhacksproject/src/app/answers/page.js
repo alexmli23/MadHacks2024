@@ -11,6 +11,7 @@ const Intro = () => {
   const [userAnswer, setUserAnswer] = useState("");
   const [todayInterest, setTodayInterest] = useState("");
   const [questionText, setQuestionText] = useState("");
+  const [otherAnswers, setOtherAnswers] = useState([]); // New state for other users' answers
   const router = useRouter();
 
   const interestQuestions = [
@@ -58,6 +59,22 @@ const Intro = () => {
           const data = await response.json();
           setUserAnswer(data.answer);
           setTodayInterest(data.todayInterest);
+
+          // Fetch all answers for the same category
+          const allAnswersResponse = await fetch("http://localhost:5001/answers-by-category", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ category: data.todayInterest })
+          });
+
+          if (allAnswersResponse.ok) {
+            const answersData = await allAnswersResponse.json();
+            setOtherAnswers(answersData.answers); // Assume the server returns answers in an `answers` array
+          } else {
+            console.error("Error fetching answers by category:", allAnswersResponse.statusText);
+          }
         } else {
           console.error("Error fetching user data:", response.statusText);
         }
@@ -111,6 +128,17 @@ const Intro = () => {
               {userAnswer}
             </div>
           </div>
+
+          <div className="flex flex-col items-center mt-8 w-full px-8">
+            <h3 className="text-2xl text-darkerorange font-sans font-bold mb-4">
+              Other Answers in {todayInterest}
+            </h3>
+            {otherAnswers.map((answer, index) => (
+              <div key={index} className="w-full max-w-screen-lg p-4 text-lg text-teal border border-gray-300 rounded-lg bg-white shadow-lg mb-4">
+                {answer}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -118,3 +146,4 @@ const Intro = () => {
 };
 
 export default Intro;
+
