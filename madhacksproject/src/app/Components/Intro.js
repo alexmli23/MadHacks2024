@@ -29,7 +29,7 @@ const Intro = () => {
     "TECHNOLOGY",
     "BEAUTY",
     "LITERATURE",
-    "LABOR",
+    "BUSINESS",
     "MOVIES",
     "FASHION",
   ];

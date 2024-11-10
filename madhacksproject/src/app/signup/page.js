@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 function SignupPage() {
   const [name, setName] = useState('');
@@ -93,6 +94,15 @@ function SignupPage() {
             </button>
           )}
         </form>
+
+        <div className="text-center mt-4">
+          <p className="text-gray-700">
+            Already have an account?{' '}
+            <Link href="/login" className="text-orange hover:underline">
+              Log in!
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
