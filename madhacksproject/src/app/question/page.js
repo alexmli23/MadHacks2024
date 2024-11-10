@@ -9,6 +9,7 @@ const Question = () => {
   const [buttonColor, setButtonColor] = useState("bg-blue-500");
   const [loading, setLoading] = useState(true);
   const [answer, setAnswer] = useState("");
+  const router = useRouter();
 
   const interestQuestions = [
     { label: 'Politics', question: 'Was the 2024 Presidential Election Rigged?' },
@@ -27,26 +28,23 @@ const Question = () => {
     { label: 'Fashion', question: 'What\'s a Trend that Should Stop?' },
   ];
 
-  const router = useRouter();
-
   useEffect(() => {
     const fetchUserInterest = async () => {
-      try {
-        const storedUserId = localStorage.getItem('userId');
-        if (!storedUserId) {
-          console.error("User ID is missing in localStorage");
-          return;
-        }
+      const storedUserId = localStorage.getItem('userId');
+      if (!storedUserId) {
+        console.error("User ID is missing in localStorage");
+        alert("Please log in again.");
+        router.push('/login');
+        return;
+      }
 
-        // Fetch the user's "today" interest (based on the stored userId)
+      try {
         const response = await fetch(`http://localhost:5001/get-user-today/${storedUserId}`);
         const data = await response.json();
 
         if (response.ok && data.today) {
           const userInterest = data.today;
           setInterest(userInterest);
-
-          // Find the corresponding question based on the "today" interest
           const selectedQuestion = interestQuestions.find(
             (item) => item.label === userInterest
           );
@@ -57,29 +55,28 @@ const Question = () => {
       } catch (error) {
         console.error("Error fetching user data:", error);
       } finally {
-        setLoading(false); // Set loading to false once the data is fetched
+        setLoading(false);
       }
     };
 
     fetchUserInterest();
   }, []);
 
-  // Handle the answer change
   const handleAnswerChange = (event) => {
-    setAnswer(event.target.value); // Update the answer state as the user types
+    setAnswer(event.target.value);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
     const storedUserId = localStorage.getItem('userId');
     if (!storedUserId) {
       console.error("User ID is missing in localStorage");
+      alert("Please log in again.");
+      router.push('/login');
       return;
     }
 
     try {
-      // Send the user's answer to the backend
       const response = await fetch('http://localhost:5001/save-answer', {
         method: 'POST',
         headers: {
@@ -88,27 +85,24 @@ const Question = () => {
         body: JSON.stringify({
           userId: storedUserId,
           interest: interest,
-          answer: answer, // Include the user's answer
+          answer: answer,
         }),
       });
 
       const data = await response.json();
       if (response.ok) {
         console.log('Answer saved successfully');
-        router.push('/answers');  // Redirect to the answers page (or any other page after saving)
+        router.push('/answers');
       } else {
-        console.log("Error saving answer");
         console.error('Error saving answer:', data.message);
       }
     } catch (error) {
-      console.log("Error submitting answer");
       console.error('Error submitting answer:', error);
     }
   };
 
-  // Ensure the component only renders when interest and question are available
   if (loading) {
-    return <div>Loading...</div>; // Or display a loading spinner
+    return <div>Loading...</div>;
   }
 
   return (
@@ -124,15 +118,15 @@ const Question = () => {
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="flex flex-col items-center space-y-4 bg-gray-100 p-6 rounded-md shadow-lg w-4/5 md:w-1/2 lg:w-1/3">
           <div className="bg-gray-200 text-gray-800 border border-gray-800 p-4 rounded-md w-full text-center">
-            {interest ? interest : '(Question)'}
+            {interest ? interest : '(Interest)'}
           </div>
           <div className="bg-gray-200 text-gray-800 border border-gray-800 p-4 rounded-md w-full text-center">
             {question ? question : '(Question)'}
           </div>
           <form className="flex flex-col items-center w-full" onSubmit={handleSubmit}>
             <textarea
-              value={answer} // Bind the value of the textarea to the answer state
-              onChange={handleAnswerChange} // Update answer state as user types
+              value={answer}
+              onChange={handleAnswerChange}
               placeholder="Your answer"
               className="w-full h-32 p-2 border border-gray-400 rounded-md resize-none focus:outline-none focus:border-blue-500 text-black"
             ></textarea>
