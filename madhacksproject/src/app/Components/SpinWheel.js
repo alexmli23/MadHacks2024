@@ -7,20 +7,20 @@ const WheelOfFortune = () => {
   const [error, setError] = useState(null);
   const [userId, setUserId] = useState(null);
   const interestQuestions = [
-    { label: 'politics', question: 'Was the 2024 Presidential Election Rigged?' },
-    { label: 'food', question: 'Is Spray Cheese Real?' },
-    { label: 'sports', question: 'Who Will Make It to the Super Bowl?' },
-    { label: 'popCulture', question: 'Who Does Not Deserve a Grammy Nomination?' },
-    { label: 'art', question: 'Is Fan Art a Real Art Form?' },
-    { label: 'gaming', question: 'Valorant: Should Chamber Be Nerfed?' },
-    { label: 'scienceEducation', question: 'Should University Tuition Cost Less?' },
-    { label: 'tech', question: 'Is the Metaverse Innovation or Dystopian?' },
-    { label: 'financeEconomics', question: 'What is your take on the current economic trends?' },
-    { label: 'beauty', question: 'Sephora, Ulta Beauty, or Drugstore Products?' },
-    { label: 'books', question: 'Is Harry Potter Really a Gryffindor?' },
-    { label: 'business', question: 'Are Workers\' Unions Beneficial or Mutiny?' },
-    { label: 'tvMovies', question: 'Should Disney Keep Making Live-Action Movies of Their Classics?' },
-    { label: 'fashion', question: 'What\'s a Trend that Should Stop?' },
+    { label: 'Politics', question: 'Was the 2024 Presidential Election Rigged?' },
+    { label: 'Food', question: 'Is Spray Cheese Real?' },
+    { label: 'Sports', question: 'Who Will Make It to the Super Bowl?' },
+    { label: 'PopCulture', question: 'Who Does Not Deserve a Grammy Nomination?' },
+    { label: 'Art', question: 'Is Fan Art a Real Art Form?' },
+    { label: 'Gaming', question: 'Valorant: Should Chamber Be Nerfed?' },
+    { label: 'ScienceEducation', question: 'Should University Tuition Cost Less?' },
+    { label: 'Tech', question: 'Is the Metaverse Innovation or Dystopian?' },
+    { label: 'FinanceEconomics', question: 'What is your take on the current economic trends?' },
+    { label: 'Beauty', question: 'Sephora, Ulta Beauty, or Drugstore Products?' },
+    { label: 'Books', question: 'Is Harry Potter Really a Gryffindor?' },
+    { label: 'Business', question: 'Are Workers\' Unions Beneficial or Mutiny?' },
+    { label: 'TVMovies', question: 'Should Disney Keep Making Live-Action Movies of Their Classics?' },
+    { label: 'Fashion', question: 'What\'s a Trend that Should Stop?' },
   ];
 
   const router = useRouter();
@@ -131,6 +131,27 @@ const WheelOfFortune = () => {
       .attr("points", `${width / 2 - 12},15 ${width / 2 + 12},15 ${width / 2},40`)
       .attr("fill", "red");
 
+      async function updateTodayInterest(interest) {
+        try {
+          const response = await fetch(`http://localhost:5001/update-today`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId, interest }),
+          });
+
+          const result = await response.json();
+          if (response.ok) {
+            console.log('Today interest updated successfully');
+          } else {
+            console.error('Error updating today interest:', result.message);
+          }
+        } catch (error) {
+          console.error('Error updating today interest:', error);
+        }
+      }
+
       function spin() {
         container.on('click', null);
       
@@ -145,19 +166,18 @@ const WheelOfFortune = () => {
             return t => `rotate(${interpolateRotation(t)})`;
           })
           .on('end', () => {
+            router.push('/question');
             const selected = data[randomIndex];
       
-            // Ensure selected.label and selected.question are valid strings
-            const interest = typeof selected.label === 'string' ? selected.label : '';
-            const question = typeof selected.question === 'string' ? selected.question : '';
+            // Update "today" interest in the database
+            updateTodayInterest(selected.label);
       
-            console.log("Navigating with:", { interest, question });
-      
+            // Navigate to the question page
             router.push({
               pathname: 'question',
               query: { 
-                interest: encodeURIComponent(interest), 
-                question: encodeURIComponent(question) 
+                interest: encodeURIComponent(selected.label), 
+                question: encodeURIComponent(selected.question) 
               },
             });
       
@@ -165,8 +185,6 @@ const WheelOfFortune = () => {
           });
       }
       
-      
-
     container.on('click', spin);
   }, [data]);
 
@@ -181,4 +199,3 @@ const WheelOfFortune = () => {
 };
 
 export default WheelOfFortune;
-

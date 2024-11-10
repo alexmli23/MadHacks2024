@@ -1,22 +1,68 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 const Question = () => {
-  const router = useRouter();
-  const { interest, question } = router.query;
+  const [interest, setInterest] = useState("");
+  const [question, setQuestion] = useState("");
   const [buttonColor, setButtonColor] = useState("bg-blue-500");
+  const [loading, setLoading] = useState(true);
+
+  const interestQuestions = [
+    { label: 'Politics', question: 'Was the 2024 Presidential Election Rigged?' },
+    { label: 'Food', question: 'Is Spray Cheese Real?' },
+    { label: 'Sports', question: 'Who Will Make It to the Super Bowl?' },
+    { label: 'PopCulture', question: 'Who Does Not Deserve a Grammy Nomination?' },
+    { label: 'Art', question: 'Is Fan Art a Real Art Form?' },
+    { label: 'Gaming', question: 'Valorant: Should Chamber Be Nerfed?' },
+    { label: 'ScienceEducation', question: 'Should University Tuition Cost Less?' },
+    { label: 'Tech', question: 'Is the Metaverse Innovation or Dystopian?' },
+    { label: 'FinanceEconomics', question: 'What is your take on the current economic trends?' },
+    { label: 'Beauty', question: 'Sephora, Ulta Beauty, or Drugstore Products?' },
+    { label: 'Books', question: 'Is Harry Potter Really a Gryffindor?' },
+    { label: 'Business', question: 'Are Workers\' Unions Beneficial or Mutiny?' },
+    { label: 'TVMovies', question: 'Should Disney Keep Making Live-Action Movies of Their Classics?' },
+    { label: 'Fashion', question: 'What\'s a Trend that Should Stop?' },
+  ];
 
   useEffect(() => {
-    const colors = ["bg-blue-500", "bg-orange-500"];
-    const randomColor = colors[Math.floor(Math.random() * colors.length)];
-    setButtonColor(randomColor);
+    const fetchUserInterest = async () => {
+      try {
+        const storedUserId = localStorage.getItem('userId');
+        if (!storedUserId) {
+          console.error("User ID is missing in localStorage");
+          return;
+        }
+
+        // Fetch the user's "today" interest (based on the stored userId)
+        const response = await fetch(`http://localhost:5001/get-user-today/${storedUserId}`);
+        const data = await response.json();
+
+        if (response.ok && data.today) {
+          const userInterest = data.today;
+          setInterest(userInterest);
+
+          // Find the corresponding question based on the "today" interest
+          const selectedQuestion = interestQuestions.find(
+            (item) => item.label === userInterest
+          );
+          if (selectedQuestion) {
+            setQuestion(selectedQuestion.question);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      } finally {
+        setLoading(false); // Set loading to false once the data is fetched
+      }
+    };
+
+    fetchUserInterest();
   }, []);
 
-  // Ensure the component only renders when router is ready
-  if (!router.isReady || !interest || !question) {
-    return null; // Or add a loading spinner here
+  // Ensure the component only renders when interest and question are available
+  if (loading) {
+    return <div>Loading...</div>; // Or display a loading spinner
   }
 
   return (
