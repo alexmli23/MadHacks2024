@@ -48,13 +48,6 @@ function SignupPage() {
 
   return (
     <div className="relative flex items-center justify-center min-h-screen">
-      <header className="absolute top-0 left-0 w-full h-16 flex items-center z-10">
-        <Link href="/login" className="ml-4">
-          <button className="text-darkerorange text-2xl font-semibold hover:underline">
-            Back
-          </button>
-        </Link>
-      </header>
 
       <video src="/Assets/background.mp4" autoPlay loop muted playsInline className="absolute top-0 left-0 w-full h-full object-cover -z-10"></video>
 
