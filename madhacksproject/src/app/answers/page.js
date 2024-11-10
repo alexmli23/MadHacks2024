@@ -1,93 +1,163 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
+import React, { useState } from "react";
 
 const Intro = () => {
-  const texts = [
-    "Was the 2024 Presidential Election Rigged?",
-    "Is Spray Cheese Real?",
-    "Who Will Make It to the Super Bowl?",
-    "Who Does Not Deserve a Grammy Nomination?",
-    "Is Fan Art a Real Art Form?",
-    "Valorant: Should Chamber Be Nerfed?",
-    "Should University Tuition Cost Less?",
-    "Is the Metaverse Progress or Dystopian?",
-    "Sephora, Ulta Beauty, or Drugstore Products?",
-    "Is Harry Potter Really a Gryffindor?",
-    "Are Workers' Unions Progressive or Mutiny?",
-    "Should Disney Keep Making Live-Action Movies of Their Classics?",
-    "What’s a Trend that Should Stop?",
+  const texts = ["Was the 2024 Presidential Election Rigged?"];
+  const categories = ["POLITICS"];
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const options = [
+    "Comment 1: Interesting perspective!",
+    "Comment 2: I disagree with this.",
+    "Comment 3: Could be possible!",
+    "Comment 4: Needs more evidence.",
   ];
 
-  const categories = [
-    "POLITICS",
-    "FOOD",
-    "SPORTS",
-    "ENTERTAINMENT",
-    "ART",
-    "GAMING",
-    "EDUCATION",
-    "TECHNOLOGY",
-    "BEAUTY",
-    "LITERATURE",
-    "LABOR",
-    "MOVIES",
-    "FASHION",
-  ];
+  // Initialize states for each comment's upvotes, downvotes, and voting status
+  const initialVotes = options.map(() => ({
+    upvotes: 0,
+    downvotes: 0,
+    userVoted: null, // null = no vote, 'up' = upvote, 'down' = downvote
+  }));
+  const [votes, setVotes] = useState(initialVotes);
 
-  const [textIndex, setTextIndex] = useState(0);
-  const [categoryIndex, setCategoryIndex] = useState(0);
+  // Handle upvote
+  const handleUpvote = (index) => {
+    setVotes((prevVotes) =>
+      prevVotes.map((vote, i) => {
+        if (i === index) {
+          if (vote.userVoted === "down") {
+            return {
+              ...vote,
+              upvotes: vote.upvotes + 1,
+              downvotes: vote.downvotes - 1,
+              userVoted: "up",
+            };
+          } else if (vote.userVoted === null) {
+            return { ...vote, upvotes: vote.upvotes + 1, userVoted: "up" };
+          }
+        }
+        return vote;
+      })
+    );
+  };
 
-  useEffect(() => {
-    const textInterval = setInterval(() => {
-      setTextIndex((prevIndex) => (prevIndex + 1) % texts.length);
-    }, 4000);
-
-    const categoryInterval = setInterval(() => {
-      setCategoryIndex((prevIndex) => (prevIndex + 1) % categories.length);
-    }, 4000);
-
-    return () => {
-      clearInterval(textInterval);
-      clearInterval(categoryInterval);
-    };
-  }, []);
+  // Handle downvote
+  const handleDownvote = (index) => {
+    setVotes((prevVotes) =>
+      prevVotes.map((vote, i) => {
+        if (i === index) {
+          if (vote.userVoted === "up") {
+            return {
+              ...vote,
+              upvotes: vote.upvotes - 1,
+              downvotes: vote.downvotes + 1,
+              userVoted: "down",
+            };
+          } else if (vote.userVoted === null) {
+            return {
+              ...vote,
+              downvotes: vote.downvotes + 1,
+              userVoted: "down",
+            };
+          }
+        }
+        return vote;
+      })
+    );
+  };
 
   return (
-    <div className="relative w-full h-screen">
-      {/* Background Video */}
+    <div className="relative w-full min-h-screen overflow-hidden">
+      {/* Fixed Background Video */}
       <video
         src="/Assets/background.mp4"
         autoPlay
         loop
         muted
         playsInline
-        className="absolute top-0 left-0 w-full h-full object-cover"
+        className="fixed top-0 left-0 w-full h-full object-cover -z-10"
       ></video>
 
-      {/* Header with Login Button */}
-      <header className="absolute top-0 w-full bg-eggshell bg-opacity-60 h-16 flex items-center justify-end px-8 z-10">
-        <Link href="/login">
-          <button className=" text-darkerorange text-2xl font-semibold text-theorange hover:underline">
-            Login
-          </button>
-        </Link>
-      </header>
+      {/* Scrollable Content */}
+      <div className="relative z-20 min-h-screen overflow-y-auto">
+        <header className="w-full bg-eggshell bg-opacity-60 h-16 flex items-center justify-end px-8 z-20"></header>
 
-      {/* Main Content */}
-      <div className="relative flex flex-col justify-center items-center w-full h-full px-8 text-center">
-        <h2 className="text-4xl text-darkerorange font-sans font-extrabold mb-2">
-          {categories[categoryIndex]}
-        </h2>
-        <h1 className="text-8xl text-teal font-serif mb-8 px-8">
-          {texts[textIndex]}
-        </h1>
-        <Link href="/Discussion">
-          <button className="text-darkerorange text-3xl bg-transparent border-none cursor-pointer py-4 text-theorange hover:underline">
-            Find out and Discuss!
-          </button>
-        </Link>
+        <div className="flex flex-col items-center w-full min-h-screen text-center z-20 pt-16">
+          <h2 className="text-2xl text-darkerorange font-sans font-extrabold mb-2">
+            {categories[0]}
+          </h2>
+          <h1 className="text-4xl text-teal font-serif mb-4 px-8">
+            {texts[0]}
+          </h1>
+
+          {/* User Answer Box */}
+          <div className="flex justify-center mt-4 w-full px-8">
+            <div className="w-full max-w-screen-lg h-32 p-4 text-lg text-teal border border-gray-300 rounded-lg bg-white shadow-lg">
+              Placeholder for your answer to the question...
+            </div>
+          </div>
+
+          {/* Comment Section Toggle */}
+          <div className="flex justify-center mt-4 w-full px-8">
+            <button
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="w-full max-w-screen-lg h-12 p-4 text-lg text-teal border border-gray-300 rounded-lg bg-white shadow-lg text-left flex justify-between items-center"
+            >
+              <span>View Comments</span>
+              <span>{dropdownOpen ? "▲" : "▼"}</span>
+            </button>
+          </div>
+
+          {/* Comment Section */}
+          {dropdownOpen && (
+            <div className="flex flex-col items-center w-full px-8 mt-2 space-y-4">
+              {options.map((option, index) => (
+                <div
+                  key={index}
+                  className="w-full max-w-screen-lg p-4 text-lg text-teal border border-gray-300 rounded-lg bg-white shadow-lg"
+                >
+                  <p>{option}</p>
+                  <div className="flex items-center space-x-4 mt-2">
+                    {/* Upvote Button */}
+                    <button
+                      onClick={() => handleUpvote(index)}
+                      className={`flex items-center space-x-1 px-2 py-1 rounded ${
+                        votes[index].userVoted === "up"
+                          ? "bg-green-500 text-white"
+                          : "bg-gray-200 text-gray-700"
+                      }`}
+                    >
+                      <img
+                        src="/Assets/thumbs-up.png"
+                        alt="Thumbs Up"
+                        className="w-4 h-4"
+                      />
+                      <span>{votes[index].upvotes}</span>
+                    </button>
+
+                    {/* Downvote Button */}
+                    <button
+                      onClick={() => handleDownvote(index)}
+                      className={`flex items-center space-x-1 px-2 py-1 rounded ${
+                        votes[index].userVoted === "down"
+                          ? "bg-red-500 text-white"
+                          : "bg-gray-200 text-gray-700"
+                      }`}
+                    >
+                      <img
+                        src="/Assets/thumbs-down.png"
+                        alt="Thumbs Down"
+                        className="w-4 h-4"
+                      />
+                      <span>{votes[index].downvotes}</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

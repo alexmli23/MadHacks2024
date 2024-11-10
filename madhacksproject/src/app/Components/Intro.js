@@ -15,7 +15,7 @@ const Intro = () => {
     "Is Harry Potter Really a Gryffindor?",
     "Are Workers' Unions Progressive or Mutiny?",
     "Should Disney Keep Making Live-Action Movies of Their Classics?",
-    "What’s a Trend that Should Stop?"
+    "What’s a Trend that Should Stop?",
   ];
 
   const categories = [
