@@ -36,21 +36,29 @@ const Intro = () => {
 
   const [textIndex, setTextIndex] = useState(0);
   const [categoryIndex, setCategoryIndex] = useState(0);
+  const [displayedText, setDisplayedText] = useState("");
+  const [charIndex, setCharIndex] = useState(0);
 
   useEffect(() => {
-    const textInterval = setInterval(() => {
-      setTextIndex((prevIndex) => (prevIndex + 1) % texts.length);
-    }, 4000);
+    if (charIndex < texts[textIndex].length) {
+      const typingTimeout = setTimeout(() => {
+        setDisplayedText((prevText) => prevText + texts[textIndex][charIndex]);
+        setCharIndex((prevIndex) => prevIndex + 1);
+      }, 100); // Typing speed
 
-    const categoryInterval = setInterval(() => {
-      setCategoryIndex((prevIndex) => (prevIndex + 1) % categories.length);
-    }, 4000);
+      return () => clearTimeout(typingTimeout);
+    } else {
+      // Pause before starting the next text
+      const pauseTimeout = setTimeout(() => {
+        setTextIndex((prevIndex) => (prevIndex + 1) % texts.length);
+        setCategoryIndex((prevIndex) => (prevIndex + 1) % categories.length);
+        setDisplayedText("");
+        setCharIndex(0);
+      }, 2000); // Delay before switching to the next text
 
-    return () => {
-      clearInterval(textInterval);
-      clearInterval(categoryInterval);
-    };
-  }, []);
+      return () => clearTimeout(pauseTimeout);
+    }
+  }, [charIndex, textIndex]);
 
   return (
     <div className="relative w-full h-screen">
@@ -79,7 +87,7 @@ const Intro = () => {
           {categories[categoryIndex]}
         </h2>
         <h1 className="text-8xl text-teal font-serif mb-8 px-8">
-          {texts[textIndex]}
+          {displayedText}
         </h1>
         <Link href="/Discussion">
           <button className="text-darkerorange text-3xl bg-transparent border-none cursor-pointer py-4 text-theorange hover:underline">
