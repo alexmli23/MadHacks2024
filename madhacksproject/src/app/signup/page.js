@@ -94,7 +94,11 @@ function SignupPage() {
               <label htmlFor="interests">Pick your interests! (Minimum of 5)</label>
               <input type="checkbox"
           </div> */}
-          <button type="submit" className="w-full py-2 px-4 bg-orange text-white font-semibold rounded-md hover:bg-darkerorange transition duration-200">Next</button>
+          {!submitted && (
+            <button type="submit" className="w-full py-2 px-4 bg-orange text-white font-semibold rounded-md hover:bg-darkerorange transition duration-200">
+              Next
+            </button>
+          )}
         </form>
 
         {submitted && (
