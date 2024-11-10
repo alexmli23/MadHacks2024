@@ -13,10 +13,10 @@ function LoginPage() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5001/login", {
-        method: "POST",
+      const response = await fetch('http://localhost:5001/login', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ username, password }),
       });
@@ -41,16 +41,14 @@ function LoginPage() {
         setError(data.message || 'Failed to log in.');
       }
     } catch (error) {
-      setError("An error occurred. Please try again later.");
-      console.error("Error during login:", error);
+      setError('An error occurred. Please try again later.');
+      console.error('Error during login:', error);
     }
   };
 
   return (
     <div className="relative flex items-center justify-center min-h-screen">
       <video src="/Assets/background.mp4" autoPlay loop muted playsInline className="absolute top-0 left-0 w-full h-full object-cover -z-10"></video>
-
-      <Link href="/"> <img src="/Assets/logo_icon.png" alt="the Orange Opinions Icon" className="absolute top-6 left-7 h-13 w-full max-w-[80px] object-contain mx-auto"/></Link>
 
       <div className="relative bg-eggshell bg-opacity-90 backdrop-blur-md p-8 rounded-lg shadow-lg max-w-md w-full text-gray-900">
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800 drop-shadow-md">Log In</h2>
@@ -79,4 +77,3 @@ function LoginPage() {
 }
 
 export default LoginPage;
-

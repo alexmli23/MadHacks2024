@@ -25,19 +25,17 @@ const WheelOfFortune = () => {
 
   const router = useRouter();
 
-  // Retrieve and validate the userId from localStorage only once on component mount
   useEffect(() => {
     const storedUserId = localStorage.getItem('userId');
     if (storedUserId) {
       setUserId(storedUserId);
-      console.log("Retrieved userId from localStorage:", storedUserId); // Debugging log
+      console.log("Retrieved userId from localStorage:", storedUserId);
     } else {
       console.error("User ID is missing in localStorage");
       setError("User ID is missing. Please log in again.");
     }
   }, []);
 
-  // Fetch interests only if userId is defined and valid
   useEffect(() => {
     if (!userId) {
       console.warn("No valid userId found; skipping fetch.");
@@ -46,26 +44,22 @@ const WheelOfFortune = () => {
 
     const fetchInterests = async () => {
       try {
-        console.log("Fetching interests for userId:", userId); // Debugging log
+        console.log("Fetching interests for userId:", userId);
         const response = await fetch(`http://localhost:5001/get-interests/${userId}`);
         const result = await response.json();
 
         if (response.ok) {
-          // Map the interests to the data format required for the wheel
           const interestsData = result.interests
-          .map(interest => {
-            // Find the matching question from the predefined `interestQuestions` array
-            const matchingQuestion = interestQuestions.find(item => item.label === interest);
-
-            // Only include the interest if a matching question is found
-            return matchingQuestion ? {
-              label: matchingQuestion.label,
-              question: matchingQuestion.question,
-            } : null;
-          })
-          .filter(item => item !== null);
+            .map(interest => {
+              const matchingQuestion = interestQuestions.find(item => item.label === interest);
+              return matchingQuestion ? {
+                label: matchingQuestion.label,
+                question: matchingQuestion.question,
+              } : null;
+            })
+            .filter(item => item !== null);
           setData(interestsData);
-          console.log("Fetched interests:", interestsData); // Debugging log
+          console.log("Fetched interests:", interestsData);
         } else {
           console.error('Error fetching interests:', result.message);
           setError(result.message || "Failed to fetch interests.");
@@ -79,16 +73,17 @@ const WheelOfFortune = () => {
     fetchInterests();
   }, [userId]);
 
-  // Render the wheel only if data is available
   useEffect(() => {
-    if (data.length === 0) return;
+    if (data.length === 0) {
+      console.warn("No data available for the wheel.");
+      return;
+    }
 
     d3.select('#chart').selectAll('*').remove();
 
     const width = 400;
     const height = 400;
     const radius = Math.min(width, height) / 2;
-    const blueColor = '#1E90FF';
 
     const svg = d3.select('#chart')
       .append('svg')
@@ -115,7 +110,7 @@ const WheelOfFortune = () => {
       .attr('class', 'slice');
 
     arcs.append('path')
-        .attr('fill', '#F6995C')
+      .attr('fill', '#F6995C')
       .attr('d', arc)
       .attr('stroke', '#f9f9f9')
       .attr('stroke-width', '2px');
@@ -136,38 +131,41 @@ const WheelOfFortune = () => {
       .attr("points", `${width / 2 - 12},15 ${width / 2 + 12},15 ${width / 2},40`)
       .attr("fill", "red");
 
-    function spin() {
-      container.on('click', null);
-
-      const sliceAngle = 360 / data.length;
-      const randomIndex = Math.floor(Math.random() * data.length);
-      const rotation = 360 * 3 + (360 - randomIndex * sliceAngle) - (sliceAngle / 2);
-
-      vis.transition()
-        .duration(3000)
-        .attrTween('transform', () => {
-          const interpolateRotation = d3.interpolate(0, rotation);
-          return t => `rotate(${interpolateRotation(t)})`;
-        })
-        .on('end', () => {
-          const selected = data[randomIndex];
-          console.log(selected.label);
-          console.log(selected.question);
-          d3.select('#question h1').text(selected.question);
-          console.log("Pushing to router:", {
-            pathname: '/question',
-            query: { interest: selected.label, question: selected.question }
+      function spin() {
+        container.on('click', null);
+      
+        const sliceAngle = 360 / data.length;
+        const randomIndex = Math.floor(Math.random() * data.length);
+        const rotation = 360 * 3 + (360 - randomIndex * sliceAngle) - (sliceAngle / 2);
+      
+        vis.transition()
+          .duration(3000)
+          .attrTween('transform', () => {
+            const interpolateRotation = d3.interpolate(0, rotation);
+            return t => `rotate(${interpolateRotation(t)})`;
+          })
+          .on('end', () => {
+            const selected = data[randomIndex];
+      
+            // Ensure selected.label and selected.question are valid strings
+            const interest = typeof selected.label === 'string' ? selected.label : '';
+            const question = typeof selected.question === 'string' ? selected.question : '';
+      
+            console.log("Navigating with:", { interest, question });
+      
+            router.push({
+              pathname: 'question',
+              query: { 
+                interest: encodeURIComponent(interest), 
+                question: encodeURIComponent(question) 
+              },
+            });
+      
+            container.on('click', spin);
           });
-          router.push({
-            pathname: "/question", // Assuming your question page is at /question
-            query: {
-              interest: encodeURIComponent(selected.label),
-              question: encodeURIComponent(selected.question)
-            },
-          });
-          container.on('click', spin);
-        });
-    }
+      }
+      
+      
 
     container.on('click', spin);
   }, [data]);
@@ -183,5 +181,4 @@ const WheelOfFortune = () => {
 };
 
 export default WheelOfFortune;
-
 

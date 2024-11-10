@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"; // Correct import for Next.js 13+
 import Link from "next/link";
 
 function SignupPage() {
@@ -48,10 +48,22 @@ function SignupPage() {
 
   return (
     <div className="relative flex items-center justify-center min-h-screen">
+      <video
+        src="/Assets/background.mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute top-0 left-0 w-full h-full object-cover -z-10"
+      ></video>
 
-      <video src="/Assets/background.mp4" autoPlay loop muted playsInline className="absolute top-0 left-0 w-full h-full object-cover -z-10"></video>
-
-      <Link href="/"> <img src="/Assets/logo_icon.png" alt="the Orange Opinions Icon" className="absolute top-6 left-7 h-13 w-full max-w-[80px] object-contain mx-auto"/></Link>
+      <Link href="/">
+        <img
+          src="/Assets/logo_icon.png"
+          alt="the Orange Opinions Icon"
+          className="absolute top-6 left-7 h-13 w-full max-w-[80px] object-contain mx-auto"
+        />
+      </Link>
 
       <div className="relative bg-eggshell bg-opacity-90 backdrop-blur-md p-8 rounded-lg shadow-lg max-w-md w-full text-gray-900">
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800 drop-shadow-md">
@@ -132,3 +144,4 @@ function SignupPage() {
 }
 
 export default SignupPage;
+

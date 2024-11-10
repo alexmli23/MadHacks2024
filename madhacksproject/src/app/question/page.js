@@ -1,26 +1,12 @@
-"use client";
+"use client"
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
 const Question = () => {
-  const [isClient, setIsClient] = useState(false); // To check if we're on the client side
+  const router = useRouter();
+  const { interest, question } = router.query;
   const [buttonColor, setButtonColor] = useState("bg-blue-500");
-  const [interest, setInterest] = useState(null);
-  const [question, setQuestion] = useState(null);
-
-  // useRouter hook will now only be used on the client-side
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      // If we are on the client side, enable routing and set state
-      const router = useRouter();
-      const { interest, question } = router.query;
-
-      setInterest(interest);
-      setQuestion(question);
-      setIsClient(true); // Set to true to indicate we're on the client side
-    }
-  }, []); // This runs only once when the component mounts
 
   useEffect(() => {
     const colors = ["bg-blue-500", "bg-orange-500"];
@@ -28,8 +14,9 @@ const Question = () => {
     setButtonColor(randomColor);
   }, []);
 
-  if (!isClient) {
-    return null; // Return nothing or a loading state while waiting for client-side rendering
+  // Ensure the component only renders when router is ready
+  if (!router.isReady || !interest || !question) {
+    return null; // Or add a loading spinner here
   }
 
   return (
