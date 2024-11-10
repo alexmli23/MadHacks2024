@@ -1,14 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-// import { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 
 function SignupPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [interests, setInterests] = useState([]);
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -30,7 +31,7 @@ function SignupPage() {
         
         if (response.ok) {
           console.log('Signup successful:', data);
-          // You could redirect the user after signup or show a success message
+          setSubmitted(true);
         } else {
           console.log('Signup error:', data);
         }
@@ -50,15 +51,6 @@ function SignupPage() {
         playsInline
         className="absolute top-0 left-0 w-full h-full object-cover -z-10"
       ></video>
-
-      {/* TEMP */}
-      <header className="absolute top-0 w-full bg-eggshell bg-opacity-60 h-16 flex items-center justify-end px-8 z-10">
-        <Link href="/interests">
-          <button className=" text-darkerorange text-2xl font-semibold">
-            temp to interests
-          </button>
-        </Link>
-      </header>
 
       {/* Sign Up Form with Blurred Glass Effect */}
       <div className="relative bg-eggshell bg-opacity-90 backdrop-blur-md p-8 rounded-lg shadow-lg max-w-md w-full text-gray-900">
@@ -105,12 +97,17 @@ function SignupPage() {
           <button type="submit" className="w-full py-2 px-4 bg-orange text-white font-semibold rounded-md hover:bg-darkerorange transition duration-200">Next</button>
         </form>
 
-        <div className="text-center mt-4">
-          <p className="text-gray-700">Already have an account?{" "}<Link href="/login" className="text-orange hover:underline">
-              Log In
-            </Link>
-          </p>
-        </div>
+        {submitted && (
+          <div className="mt-4 text-center">
+            <p className="text-gray-700">
+              Signup successful!{" "}
+              <Link href="/interests" className="text-orange hover:underline">
+                Go to Interests
+              </Link>
+            </p>
+          </div>
+        )}
+
         </div>        
     </div>
   );
