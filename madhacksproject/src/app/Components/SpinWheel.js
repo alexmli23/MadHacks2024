@@ -166,21 +166,9 @@ const WheelOfFortune = () => {
             return t => `rotate(${interpolateRotation(t)})`;
           })
           .on('end', () => {
-            router.push('/question');
             const selected = data[randomIndex];
-      
-            // Update "today" interest in the database
             updateTodayInterest(selected.label);
-      
-            // Navigate to the question page
-            router.push({
-              pathname: 'question',
-              query: { 
-                interest: encodeURIComponent(selected.label), 
-                question: encodeURIComponent(selected.question) 
-              },
-            });
-      
+            router.push('/question');
             container.on('click', spin);
           });
       }

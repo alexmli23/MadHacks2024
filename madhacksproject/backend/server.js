@@ -165,7 +165,9 @@ app.post('/update-today', async (req, res) => {
         return res.status(200).json({ message: "Today interest updated successfully" });
       } else {
         // If user.today is not filled, send a message indicating no update
-        return res.status(400).json({ message: "User's 'today' interest is not filled yet. No update made." });
+        user.today = interest;
+        await user.save();
+        return res.status(200).json({ message: "User's 'today' interest is not filled yet. updated." });
       }
     } catch (error) {
       console.error("Error updating today interest:", error);
