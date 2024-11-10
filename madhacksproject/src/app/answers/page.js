@@ -1,75 +1,99 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 
 const Intro = () => {
   const texts = ["Was the 2024 Presidential Election Rigged?"];
   const categories = ["POLITICS"];
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [filterDropdownOpen, setFilterDropdownOpen] = useState(false);
+  const [filter, setFilter] = useState("All");
+
   const options = [
-    "Comment 1: Interesting perspective!",
-    "Comment 2: I disagree with this.",
-    "Comment 3: Could be possible!",
-    "Comment 4: Needs more evidence.",
+    {
+      text: "Comment 1: Interesting perspective!",
+      bluePercent: 80,
+      neutralPercent: 10,
+      redPercent: 10,
+    },
+    {
+      text: "Comment 2: I disagree with this.",
+      bluePercent: 20,
+      neutralPercent: 60,
+      redPercent: 20,
+    },
+    {
+      text: "Comment 3: Could be possible!",
+      bluePercent: 20,
+      neutralPercent: 10,
+      redPercent: 70,
+    },
+    {
+      text: "Comment 4: Needs more evidence.",
+      bluePercent: 10,
+      neutralPercent: 10,
+      redPercent: 80,
+    },
   ];
 
-  // Initialize states for each comment's upvotes, downvotes, and voting status
+  // Initialize votes with upvotes and downvotes for each comment
   const initialVotes = options.map(() => ({
     upvotes: 0,
     downvotes: 0,
-    userVoted: null, // null = no vote, 'up' = upvote, 'down' = downvote
+    userVoted: null,
   }));
   const [votes, setVotes] = useState(initialVotes);
 
-  // Handle upvote
+  // Upvote function
   const handleUpvote = (index) => {
     setVotes((prevVotes) =>
-      prevVotes.map((vote, i) => {
-        if (i === index) {
-          if (vote.userVoted === "down") {
-            return {
-              ...vote,
-              upvotes: vote.upvotes + 1,
-              downvotes: vote.downvotes - 1,
-              userVoted: "up",
-            };
-          } else if (vote.userVoted === null) {
-            return { ...vote, upvotes: vote.upvotes + 1, userVoted: "up" };
-          }
-        }
-        return vote;
-      })
+      prevVotes.map((vote, i) =>
+        i === index
+          ? { ...vote, upvotes: vote.upvotes + 1, userVoted: "up" }
+          : vote
+      )
     );
   };
 
-  // Handle downvote
+  // Downvote function
   const handleDownvote = (index) => {
     setVotes((prevVotes) =>
-      prevVotes.map((vote, i) => {
-        if (i === index) {
-          if (vote.userVoted === "up") {
-            return {
-              ...vote,
-              upvotes: vote.upvotes - 1,
-              downvotes: vote.downvotes + 1,
-              userVoted: "down",
-            };
-          } else if (vote.userVoted === null) {
-            return {
-              ...vote,
-              downvotes: vote.downvotes + 1,
-              userVoted: "down",
-            };
-          }
-        }
-        return vote;
-      })
+      prevVotes.map((vote, i) =>
+        i === index
+          ? { ...vote, downvotes: vote.downvotes + 1, userVoted: "down" }
+          : vote
+      )
     );
   };
+
+  // Combine options and votes, then sort based on the selected filter
+  const combinedData = options.map((option, index) => ({
+    ...option,
+    ...votes[index],
+  }));
+
+  const sortedOptions = combinedData
+    .sort((a, b) => {
+      if (filter === "Most Likes") return b.upvotes - a.upvotes;
+      if (filter === "Most Dislikes") return b.downvotes - a.downvotes;
+      return 0;
+    })
+    .filter((option) => {
+      const maxPercent = Math.max(
+        option.redPercent,
+        option.bluePercent,
+        option.neutralPercent
+      );
+      if (filter === "Highest Red") return option.redPercent === maxPercent;
+      if (filter === "Highest Blue") return option.bluePercent === maxPercent;
+      if (filter === "Highest Neutral")
+        return option.neutralPercent === maxPercent;
+      return true; // "All" option, show all comments
+    });
 
   return (
     <div className="relative w-full min-h-screen overflow-hidden">
-      {/* Fixed Background Video */}
       <video
         src="/Assets/background.mp4"
         autoPlay
@@ -79,9 +103,14 @@ const Intro = () => {
         className="fixed top-0 left-0 w-full h-full object-cover -z-10"
       ></video>
 
-      {/* Scrollable Content */}
       <div className="relative z-20 min-h-screen overflow-y-auto">
-        <header className="w-full bg-eggshell bg-opacity-60 h-16 flex items-center justify-end px-8 z-20"></header>
+        <header className="absolute top-0 left-0 w-full h-16 flex items-center z-10">
+          <Link href="/home" className="ml-4">
+            <button className="text-darkerorange text-2xl font-semibold hover:underline">
+              Back
+            </button>
+          </Link>
+        </header>
 
         <div className="flex flex-col items-center w-full min-h-screen text-center z-20 pt-16">
           <h2 className="text-2xl text-darkerorange font-sans font-extrabold mb-2">
@@ -109,21 +138,55 @@ const Intro = () => {
             </button>
           </div>
 
-          {/* Comment Section */}
+          {/* Filter Selector and Comment Section */}
           {dropdownOpen && (
-            <div className="flex flex-col items-center w-full px-8 mt-2 space-y-4">
-              {options.map((option, index) => (
+            <div className="flex flex-col items-center w-full px-8 mt-4 space-y-4">
+              {/* Filter Dropdown */}
+              <div className="relative w-full max-w-screen-lg">
+                <button
+                  onClick={() => setFilterDropdownOpen(!filterDropdownOpen)}
+                  className="w-full h-12 p-4 text-lg text-teal border border-gray-300 rounded-lg bg-white shadow-lg text-left flex justify-between items-center"
+                >
+                  <span>Filter: {filter}</span>
+                  <span>{filterDropdownOpen ? "▲" : "▼"}</span>
+                </button>
+                {filterDropdownOpen && (
+                  <div className="absolute w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-1 z-10">
+                    {[
+                      "All",
+                      "Highest Red",
+                      "Highest Blue",
+                      "Highest Neutral",
+                      "Most Likes",
+                      "Most Dislikes",
+                    ].map((option) => (
+                      <button
+                        key={option}
+                        onClick={() => {
+                          setFilter(option);
+                          setFilterDropdownOpen(false);
+                        }}
+                        className="block w-full text-left px-4 py-2 hover:bg-gray-200 text-teal font-semibold"
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Filtered Comments */}
+              {sortedOptions.map((option, index) => (
                 <div
                   key={index}
                   className="w-full max-w-screen-lg p-4 text-lg text-teal border border-gray-300 rounded-lg bg-white shadow-lg"
                 >
-                  <p>{option}</p>
+                  <p>{option.text}</p>
                   <div className="flex items-center space-x-4 mt-2">
-                    {/* Upvote Button */}
                     <button
                       onClick={() => handleUpvote(index)}
                       className={`flex items-center space-x-1 px-2 py-1 rounded ${
-                        votes[index].userVoted === "up"
+                        option.userVoted === "up"
                           ? "bg-green-500 text-white"
                           : "bg-gray-200 text-gray-700"
                       }`}
@@ -133,14 +196,13 @@ const Intro = () => {
                         alt="Thumbs Up"
                         className="w-4 h-4"
                       />
-                      <span>{votes[index].upvotes}</span>
+                      <span>{option.upvotes}</span>
                     </button>
 
-                    {/* Downvote Button */}
                     <button
                       onClick={() => handleDownvote(index)}
                       className={`flex items-center space-x-1 px-2 py-1 rounded ${
-                        votes[index].userVoted === "down"
+                        option.userVoted === "down"
                           ? "bg-red-500 text-white"
                           : "bg-gray-200 text-gray-700"
                       }`}
@@ -150,8 +212,24 @@ const Intro = () => {
                         alt="Thumbs Down"
                         className="w-4 h-4"
                       />
-                      <span>{votes[index].downvotes}</span>
+                      <span>{option.downvotes}</span>
                     </button>
+                  </div>
+
+                  {/* Percentage Bar */}
+                  <div className="mt-4 w-full h-4 flex rounded-full overflow-hidden">
+                    <div
+                      style={{ width: `${option.bluePercent}%` }}
+                      className="bg-blue-500"
+                    ></div>
+                    <div
+                      style={{ width: `${option.neutralPercent}%` }}
+                      className="bg-gray-400"
+                    ></div>
+                    <div
+                      style={{ width: `${option.redPercent}%` }}
+                      className="bg-red-500"
+                    ></div>
                   </div>
                 </div>
               ))}

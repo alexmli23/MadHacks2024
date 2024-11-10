@@ -1,7 +1,7 @@
 "use client"; // Add this line at the top
 
 import React, { useState } from "react";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
 const CategoriesList = () => {
   const router = useRouter();
@@ -47,7 +47,7 @@ const CategoriesList = () => {
     // Process the selected category (e.g., send it to a server or update the state)
     console.log("Selected category:", selectedCategory);
     // For example, if you want to send it to an API, you can do that here
-    router.push('/question');
+    router.push("/question");
   };
 
   return (
@@ -64,9 +64,7 @@ const CategoriesList = () => {
 
       {/* Prioritized Interests */}
       <div className="flex flex-col items-center space-y-4 z-10 pt-10 px-10">
-        <h2 className="text-3xl font-bold text-sky-500 mb-4">
-          Prioritized Interests
-        </h2>
+        <h2 className="text-3xl font-bold text-sky-500 mb-4">Interests</h2>
         <div className="flex flex-wrap justify-center items-center space-x-4">
           {prioritizedCategories.map((category, index) => (
             <button
