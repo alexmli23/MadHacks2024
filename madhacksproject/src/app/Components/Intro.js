@@ -5,7 +5,7 @@ const Intro = () => {
   const texts = [
     "Was the 2024 Presidential Election Rigged?",
     "Is Spray Cheese Real?",
-    "Who Will Make It to the Super Bowl?",
+    "Is Chess a Real Sport?",
     "Who Does Not Deserve a Grammy Nomination?",
     "Is Fan Art a Real Art Form?",
     "Valorant: Should Chamber Be Nerfed?",
