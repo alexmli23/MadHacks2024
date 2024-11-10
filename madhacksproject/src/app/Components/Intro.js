@@ -89,11 +89,14 @@ const Intro = () => {
         <h1 className="text-8xl text-teal font-serif mb-8 px-8 max-w-6xl mx-auto">
           {displayedText}
         </h1>
-        <Link href="/Discussion">
+        <p className="text-darkerorange text-3xl bg-transparent border-none py-4 text-theorange">
+          Login and Discuss!
+        </p>
+        {/* <Link href="/Discussion">
           <button className="text-darkerorange text-3xl bg-transparent border-none cursor-pointer py-4 text-theorange hover:underline">
             Find out and Discuss!
           </button>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );
