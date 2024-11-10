@@ -72,8 +72,13 @@ const Intro = () => {
         className="absolute top-0 left-0 w-full h-full object-cover"
       ></video>
 
-      {/* Header with Login Button */}
-      <header className="absolute top-0 w-full bg-eggshell bg-opacity-60 h-16 flex items-center justify-end px-8 z-10">
+      {/* Header with Login Button and Logo */}
+      <header className="absolute top-0 w-full bg-eggshell bg-opacity-60 h-20 flex items-center justify-end px-8 z-10">
+      <img
+        src="Assets/logo_text.png" 
+        alt="the Orange Opinion"
+        className="w-full max-w-[300px] object-contain mx-auto"
+      />
         <Link href="/login">
           <button className=" text-darkerorange text-2xl font-semibold text-theorange hover:underline">
             Login
