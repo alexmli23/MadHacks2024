@@ -33,13 +33,13 @@ const Intro = () => {
 
   const options = [
     {
-      text: "Comment 1: Interesting perspective!",
+      text: "Comment 1: That's a fresh take; I hadn't considered it this way.",
       bluePercent: 80,
       neutralPercent: 10,
       redPercent: 10,
     },
     {
-      text: "Comment 2: I disagree with this.",
+      text: "Comment 2: I see where you're coming from, though I might lean a bit differently.",
       bluePercent: 20,
       neutralPercent: 60,
       redPercent: 20,
@@ -51,12 +51,49 @@ const Intro = () => {
       redPercent: 70,
     },
     {
-      text: "Comment 4: Needs more evidence.",
+      text: "Comment 4: Not entirely convinced, it could benefit from more data.",
       bluePercent: 10,
       neutralPercent: 10,
       redPercent: 80,
     },
+    {
+      text: "Comment 5: I like the optimism here; it’s refreshing to hear.",
+      bluePercent: 70,
+      neutralPercent: 20,
+      redPercent: 10,
+    },
+    {
+      text: "Comment 6: I'm open to this perspective, though I'd need more context.",
+      bluePercent: 30,
+      neutralPercent: 50,
+      redPercent: 20,
+    },
+    {
+      text: "Comment 7: It’s an idea, but I’m a bit skeptical.",
+      bluePercent: 10,
+      neutralPercent: 20,
+      redPercent: 70,
+    },
+    {
+      text: "Comment 8: Interesting, but I see some potential downsides.",
+      bluePercent: 20,
+      neutralPercent: 30,
+      redPercent: 50,
+    },
+    {
+      text: "Comment 9: This approach could work well in certain scenarios.",
+      bluePercent: 60,
+      neutralPercent: 30,
+      redPercent: 10,
+    },
+    {
+      text: "Comment 10: I appreciate the idea but have a few reservations.",
+      bluePercent: 40,
+      neutralPercent: 20,
+      redPercent: 40,
+    },
   ];
+  
 
   // Initialize votes with upvotes and downvotes for each comment
   const initialVotes = options.map(() => ({
