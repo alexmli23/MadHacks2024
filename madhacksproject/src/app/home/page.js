@@ -44,10 +44,8 @@ const CategoriesList = () => {
       return;
     }
 
-    // Process the selected category (e.g., send it to a server or update the state)
-    console.log("Selected category:", selectedCategory);
-    // For example, if you want to send it to an API, you can do that here
-    router.push("/question");
+    // Redirect to the question page with the selected category as a query parameter
+    router.push(`/question?category=${selectedCategory}`);
   };
 
   return (
@@ -118,3 +116,4 @@ const CategoriesList = () => {
 };
 
 export default CategoriesList;
+
