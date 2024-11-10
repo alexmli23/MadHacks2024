@@ -63,14 +63,7 @@ const Intro = () => {
   return (
     <div className="relative w-full h-screen">
       {/* Background Video */}
-      <video
-        src="/Assets/background.mp4"
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute top-0 left-0 w-full h-full object-cover"
-      ></video>
+      <video src="/Assets/background.mp4" autoPlay loop muted playsInline className="absolute top-0 left-0 w-full h-full object-cover"></video>
 
       {/* Header with Login Button and Logo */}
       <header className="absolute top-0 w-full bg-eggshell bg-opacity-60 h-20 flex items-center justify-end px-8 z-10">
