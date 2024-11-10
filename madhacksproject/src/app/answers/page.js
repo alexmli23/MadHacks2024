@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 
 const Intro = () => {
   const texts = ["Was the 2024 Presidential Election Rigged?"];
@@ -81,7 +82,14 @@ const Intro = () => {
 
       {/* Scrollable Content */}
       <div className="relative z-20 min-h-screen overflow-y-auto">
-        <header className="w-full bg-eggshell bg-opacity-60 h-16 flex items-center justify-end px-8 z-20"></header>
+        {/* Header with Back Button */}
+        <header className="absolute top-0 left-0 w-full h-16 flex items-center z-10">
+          <Link href="/home" className="ml-4">
+            <button className="text-darkerorange text-2xl font-semibold hover:underline">
+              Back
+            </button>
+          </Link>
+        </header>
 
         <div className="flex flex-col items-center w-full min-h-screen text-center z-20 pt-16">
           <h2 className="text-2xl text-darkerorange font-sans font-extrabold mb-2">
