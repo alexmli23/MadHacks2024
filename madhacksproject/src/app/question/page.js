@@ -78,7 +78,10 @@ const Question = () => {
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="flex flex-col items-center space-y-4 bg-gray-100 p-6 rounded-md shadow-lg w-4/5 md:w-1/2 lg:w-1/3">
           <div className="bg-gray-200 text-gray-800 border border-gray-800 p-4 rounded-md w-full text-center">
-            {category ? category : '(Question)'}
+            {interest ? interest : '(Question)'}
+          </div>
+          <div className="bg-gray-200 text-gray-800 border border-gray-800 p-4 rounded-md w-full text-center">
+            {question ? question : '(Question)'}
           </div>
           <form className="flex flex-col items-center w-full">
             <textarea
